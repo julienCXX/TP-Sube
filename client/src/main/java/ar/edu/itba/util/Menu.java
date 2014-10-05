@@ -13,13 +13,39 @@ public class Menu
 {
 	private final Map<String, MenuItem> items;
 	private String introText = "";
+	private final boolean isRoot;
 
 	/**
-	 * Creates an empty menu.
+	 * Creates an empty menu (root level).
 	 */
 	public Menu()
 	{
+		this.isRoot = true;
 		items = new LinkedHashMap<>();
+	}
+
+	/**
+	 * Creates an empty menu.
+	 *
+	 * @param isRoot true if this menu is the root menu or false otherwise
+	 */
+	public Menu(boolean isRoot)
+	{
+		items = new LinkedHashMap<>();
+		this.isRoot = isRoot;
+	}
+
+	/**
+	 * Creates an empty menu (root level), with a text shown at the beginning of
+	 * the menu (at each display).
+	 *
+	 * @param text the text to show at the beginning of the menu.
+	 */
+	public Menu(String text)
+	{
+		this.isRoot = true;
+		items = new LinkedHashMap<>();
+		setIntroText(text);
 	}
 
 	/**
@@ -27,11 +53,13 @@ public class Menu
 	 * each display).
 	 *
 	 * @param text the text to show at the beginning of the menu.
+	 * @param isRoot true if this menu is the root menu or false otherwise
 	 */
-	public Menu(String text)
+	public Menu(String text, boolean isRoot)
 	{
 		items = new LinkedHashMap<>();
 		setIntroText(text);
+		this.isRoot = isRoot;
 	}
 
 	/**
@@ -81,7 +109,7 @@ public class Menu
 
 	private void printMenuLoop()
 	{
-		IO.println(introText);
+		IO.printlnInfo(introText);
 		IO.println("Choose an option typing its code and pressing “Return”");
 		IO.println("Code -> item");
 		IO.println();
@@ -89,7 +117,8 @@ public class Menu
 		{
 			IO.println(mi + "");
 		}
-		IO.println("\nTo exit, write an empty string");
+		IO.println("\nTo " + (isRoot ? "exit" : "go to previous menu")
+			+ ", write an empty string");
 		IO.print("Your choice: ");
 	}
 
@@ -114,7 +143,7 @@ public class Menu
 				IO.pause();
 			} else
 			{
-				IO.printlnInfo("Starting “" + choosenItem.getName() + "”");
+				IO.printlnInfo(choosenItem.getName());
 				try
 				{
 					choosenItem.runItem();
@@ -122,8 +151,6 @@ public class Menu
 				{
 					Logger.getLogger(Menu.class.getName()).log(Level.SEVERE, null, ex);
 				}
-				IO.printlnInfo("End of “" + choosenItem.getName() + "”");
-				IO.pause();
 			}
 			IO.println();
 			printMenuLoop();
