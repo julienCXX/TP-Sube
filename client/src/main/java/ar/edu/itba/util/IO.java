@@ -113,6 +113,33 @@ public class IO
 	}
 
 	/**
+	 * Reads a double from the standard input and returns it. Blocks the
+	 * execution flow until a valid float number is entered.
+	 *
+	 * @return the read double
+	 */
+	public static double readDouble()
+	{
+		String line;
+		double res = 0.0;
+		boolean validRead = false;
+		while (!validRead)
+		{
+			try
+			{
+				IO.print("Enter a double value: ");
+				line = readLine();
+				res = Double.parseDouble(line);
+				validRead = true;
+			} catch (NumberFormatException nfe)
+			{
+				IO.printlnError("Reading error, please try again");
+			}
+		}
+		return res;
+	}
+
+	/**
 	 * Pauses the program's execution, waiting for the user to continue.
 	 */
 	public static void pause()
