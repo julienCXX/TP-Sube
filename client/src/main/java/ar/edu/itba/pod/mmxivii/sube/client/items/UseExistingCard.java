@@ -1,10 +1,10 @@
 package ar.edu.itba.pod.mmxivii.sube.client.items;
 
+import ar.edu.itba.pod.mmxivii.sube.client.CardWallet;
 import ar.edu.itba.pod.mmxivii.sube.client.items.generic.ClientRootMenuItem;
 import ar.edu.itba.pod.mmxivii.sube.common.Card;
 import ar.edu.itba.pod.mmxivii.sube.common.CardClient;
 import ar.edu.itba.util.Menu;
-import java.util.Collection;
 
 /**
  * The menu option handling the use of an existing card.
@@ -12,7 +12,7 @@ import java.util.Collection;
 public class UseExistingCard extends ClientRootMenuItem
 {
 
-	public UseExistingCard(Collection<Card> cards, CardClient cardClient)
+	public UseExistingCard(CardWallet cards, CardClient cardClient)
 	{
 		super(cards, cardClient);
 	}

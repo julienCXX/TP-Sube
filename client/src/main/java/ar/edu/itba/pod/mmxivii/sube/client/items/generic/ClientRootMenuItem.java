@@ -1,8 +1,7 @@
 package ar.edu.itba.pod.mmxivii.sube.client.items.generic;
 
-import ar.edu.itba.pod.mmxivii.sube.common.Card;
+import ar.edu.itba.pod.mmxivii.sube.client.CardWallet;
 import ar.edu.itba.pod.mmxivii.sube.common.CardClient;
-import java.util.Collection;
 
 /**
  * A menu item using a list of existing cards and the CardClient object.
@@ -10,9 +9,9 @@ import java.util.Collection;
 public abstract class ClientRootMenuItem extends ClientMenuItem
 {
 
-	protected Collection<Card> cards;
+	protected CardWallet cards;
 
-	public ClientRootMenuItem(Collection<Card> cards, CardClient cardClient)
+	public ClientRootMenuItem(CardWallet cards, CardClient cardClient)
 	{
 		super(cardClient);
 		this.cards = cards;
