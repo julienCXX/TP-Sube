@@ -26,13 +26,19 @@ public class Travel extends CardMenuItem
 		amount = IO.readDouble();
 		IO.println("Please put a description of the travel: ");
 		description = IO.readLine();
-		newBalance = cardClient.travel(card.getId(), description, amount);
-		if (newBalance < 0.0)
+		try
 		{
-			printCardOperationError(newBalance, false);
-		} else
+			newBalance = cardClient.travel(card.getId(), description, amount);
+			if (newBalance < 0.0)
+			{
+				printCardOperationError(newBalance, false);
+			} else
+			{
+				IO.println("Traveled successfully. New balance: " + newBalance);
+			}
+		} catch (IllegalArgumentException iae)
 		{
-			IO.println("Traveled successfully. New balance: " + newBalance);
+			IO.printlnError(iae.getMessage()); // recharge too big
 		}
 	}
 
