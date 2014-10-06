@@ -20,7 +20,7 @@ public class UseExistingCard extends ClientRootMenuItem
 	@Override
 	public void runItem() throws Exception
 	{
-		Menu menu = new Menu("Choose the card you want too use", false);
+		Menu menu = new Menu("Choose the card you want to use", false);
 		int i = 1;
 		for (Card card : cards)
 		{
