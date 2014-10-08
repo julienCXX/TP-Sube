@@ -1,14 +1,19 @@
 package ar.edu.itba.pod.mmxivii.sube.client.items.generic;
 
+import ar.edu.itba.pod.mmxivii.sube.client.exceptions.CannotProcessRequestException;
+import ar.edu.itba.pod.mmxivii.sube.client.exceptions.CardNotFoundException;
+import ar.edu.itba.pod.mmxivii.sube.client.exceptions.CardOperationException;
+import ar.edu.itba.pod.mmxivii.sube.client.exceptions.CommunicationsFailureException;
+import ar.edu.itba.pod.mmxivii.sube.client.exceptions.OperationNotPermittedByBalanceException;
+import ar.edu.itba.pod.mmxivii.sube.client.exceptions.ServiceTimeoutException;
+import ar.edu.itba.pod.mmxivii.sube.client.exceptions.UnknownCardOperationException;
 import ar.edu.itba.pod.mmxivii.sube.common.Card;
 import ar.edu.itba.pod.mmxivii.sube.common.CardClient;
 import static ar.edu.itba.pod.mmxivii.sube.common.CardRegistry.CANNOT_PROCESS_REQUEST;
 import static ar.edu.itba.pod.mmxivii.sube.common.CardRegistry.CARD_NOT_FOUND;
 import static ar.edu.itba.pod.mmxivii.sube.common.CardRegistry.COMMUNICATIONS_FAILURE;
-import static ar.edu.itba.pod.mmxivii.sube.common.CardRegistry.MAX_BALANCE;
 import static ar.edu.itba.pod.mmxivii.sube.common.CardRegistry.OPERATION_NOT_PERMITTED_BY_BALANCE;
 import static ar.edu.itba.pod.mmxivii.sube.common.CardRegistry.SERVICE_TIMEOUT;
-import ar.edu.itba.util.IO;
 
 /**
  * A menu item using the CardClient object and a choosen card.
@@ -28,44 +33,32 @@ public abstract class CardMenuItem extends ClientMenuItem
 	 * Prints a meaningful error message, depending on a return value of a card
 	 * operation.
 	 *
-	 * @param ret the return value determining the message to be displayed
+	 * @param ret the return value determining the exception to be thrown
 	 * @param isRecharge true if the operation was a card recharge operation,
 	 * false otherwise
+	 * @throws
+	 * ar.edu.itba.pod.mmxivii.sube.client.exceptions.CardOperationException the
+	 * exception that will be thrown if an error is detected
 	 */
-	protected static void printCardOperationError(double ret, boolean isRecharge)
+	protected void checkAndThrowCardOperationError(double ret,
+		boolean isRecharge)
+		throws CardOperationException
 	{
-		if (ret >= 0.0)
-		{
-			IO.printlnInfo("No error, code: " + ret);
-			return;
-		}
 		switch ((int) ret)
 		{
 			case (int) CARD_NOT_FOUND:
-				IO.printlnError("This card does not exist");
-				break;
+				throw new CardNotFoundException(card);
 			case (int) CANNOT_PROCESS_REQUEST:
-				IO.printlnError("The service cannot process the request");
-				break;
+				throw new CannotProcessRequestException(card);
 			case (int) COMMUNICATIONS_FAILURE:
-				IO.printlnError("Communication with service failed");
-				break;
+				throw new CommunicationsFailureException(card);
 			case (int) OPERATION_NOT_PERMITTED_BY_BALANCE:
-				if (isRecharge)
-				{
-					IO.printlnError("The balance cannot be over "
-						+ MAX_BALANCE);
-				} else
-				{
-					IO.printlnError("The balance is insufficient to perform "
-						+ "this operation");
-				}
-				break;
+				throw new OperationNotPermittedByBalanceException(card,
+					isRecharge);
 			case (int) SERVICE_TIMEOUT:
-				IO.printlnError("Connection to service timed out");
-				break;
+				throw new ServiceTimeoutException(card);
 			default:
-				IO.printlnError("Unknown error, code: " + ret);
+				throw new UnknownCardOperationException(card, ret);
 		}
 	}
 
