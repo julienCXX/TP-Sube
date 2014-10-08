@@ -1,5 +1,7 @@
 package ar.edu.itba.pod.mmxivii.sube.client.items;
 
+import ar.edu.itba.pod.mmxivii.sube.client.exceptions.CardNotFoundException;
+import ar.edu.itba.pod.mmxivii.sube.client.exceptions.CardOperationException;
 import ar.edu.itba.pod.mmxivii.sube.client.items.generic.CardMenuItem;
 import ar.edu.itba.pod.mmxivii.sube.common.Card;
 import ar.edu.itba.pod.mmxivii.sube.common.CardClient;
@@ -22,7 +24,17 @@ public class GetBalance extends CardMenuItem
 		double balance = cardClient.getCardBalance(card.getId());
 		if (balance < 0.0)
 		{
-			printCardOperationError(balance, false);
+			try
+			{
+				checkAndThrowCardOperationError(balance, false);
+			} catch (CardOperationException coe)
+			{
+				if (coe instanceof CardNotFoundException)
+				{
+					throw coe;
+				}
+				IO.printlnError(coe.getMessage());
+			}
 		} else
 		{
 			IO.println("Current balance: " + balance);

@@ -1,5 +1,7 @@
 package ar.edu.itba.pod.mmxivii.sube.client.items;
 
+import ar.edu.itba.pod.mmxivii.sube.client.exceptions.CardNotFoundException;
+import ar.edu.itba.pod.mmxivii.sube.client.exceptions.CardOperationException;
 import ar.edu.itba.pod.mmxivii.sube.client.items.generic.CardMenuItem;
 import ar.edu.itba.pod.mmxivii.sube.common.Card;
 import ar.edu.itba.pod.mmxivii.sube.common.CardClient;
@@ -30,7 +32,17 @@ public class Recharge extends CardMenuItem
 			newBalance = cardClient.recharge(card.getId(), description, amount);
 			if (newBalance < 0.0)
 			{
-				printCardOperationError(newBalance, true);
+				try
+				{
+					checkAndThrowCardOperationError(newBalance, true);
+				} catch (CardOperationException coe)
+				{
+					if (coe instanceof CardNotFoundException)
+					{
+						throw coe;
+					}
+					IO.printlnError(coe.getMessage());
+				}
 			} else
 			{
 				IO.println("Recharged successfully. New balance: "

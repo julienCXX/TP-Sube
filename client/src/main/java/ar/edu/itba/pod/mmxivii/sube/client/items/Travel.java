@@ -1,5 +1,7 @@
 package ar.edu.itba.pod.mmxivii.sube.client.items;
 
+import ar.edu.itba.pod.mmxivii.sube.client.exceptions.CardNotFoundException;
+import ar.edu.itba.pod.mmxivii.sube.client.exceptions.CardOperationException;
 import ar.edu.itba.pod.mmxivii.sube.client.items.generic.CardMenuItem;
 import ar.edu.itba.pod.mmxivii.sube.common.Card;
 import ar.edu.itba.pod.mmxivii.sube.common.CardClient;
@@ -11,12 +13,12 @@ import ar.edu.itba.util.IO;
  */
 public class Travel extends CardMenuItem
 {
-
+	
 	public Travel(CardClient cardClient, Card card)
 	{
 		super(cardClient, card);
 	}
-
+	
 	@Override
 	public void runItem() throws Exception
 	{
@@ -31,7 +33,17 @@ public class Travel extends CardMenuItem
 			newBalance = cardClient.travel(card.getId(), description, amount);
 			if (newBalance < 0.0)
 			{
-				printCardOperationError(newBalance, false);
+				try
+				{
+					checkAndThrowCardOperationError(newBalance, false);
+				} catch (CardOperationException coe)
+				{
+					if (coe instanceof CardNotFoundException)
+					{
+						throw coe;
+					}
+					IO.printlnError(coe.getMessage());
+				}
 			} else
 			{
 				IO.println("Traveled successfully. New balance: " + newBalance);
@@ -41,5 +53,5 @@ public class Travel extends CardMenuItem
 			IO.printlnError(iae.getMessage()); // recharge too big
 		}
 	}
-
+	
 }
