@@ -1,9 +1,11 @@
 package ar.edu.itba.pod.mmxivii.sube.client.items;
 
+import ar.edu.itba.pod.mmxivii.sube.client.exceptions.CardNotFoundException;
 import ar.edu.itba.pod.mmxivii.sube.client.CardWallet;
 import ar.edu.itba.pod.mmxivii.sube.client.items.generic.ClientRootMenuItem;
 import ar.edu.itba.pod.mmxivii.sube.common.Card;
 import ar.edu.itba.pod.mmxivii.sube.common.CardClient;
+import ar.edu.itba.util.IO;
 import ar.edu.itba.util.Menu;
 
 /**
@@ -29,7 +31,18 @@ public class UseExistingCard extends ClientRootMenuItem
 				new CardMenu(cardClient, card));
 			i++;
 		}
-		menu.run();
+		try
+		{
+			menu.run();
+		} catch (CardNotFoundException cnfe)
+		{
+			IO.printlnError(cnfe.getMessage());
+			IO.print("Do you want to remove this card from the wallet? ");
+			if (IO.readYesNo(IO.DefaultYesNo.YES))
+			{
+				cards.remove(cnfe.getCard());
+			}
+		}
 	}
 
 }

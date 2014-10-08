@@ -49,6 +49,16 @@ public class CardWallet implements Iterable<Card>
 	}
 
 	/**
+	 * Removes a card form the wallet.
+	 *
+	 * @param card th card to be removed
+	 */
+	public void remove(Card card)
+	{
+		cards.remove(card);
+	}
+
+	/**
 	 * Loads a wallet from a file, replacing the wallet's content. If the file
 	 * does not exists, nothing will be done.
 	 *
