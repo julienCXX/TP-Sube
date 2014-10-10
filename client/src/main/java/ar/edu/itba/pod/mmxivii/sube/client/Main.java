@@ -57,7 +57,14 @@ public class Main extends BaseMain
 			mainMenu.addMenuItem("2", "Use an existing card",
 				new UseExistingCard(cards, cardClient));
 
-			mainMenu.run();
+			try
+			{
+				mainMenu.run();
+			} catch (Exception ex)
+			{
+				Logger.getLogger(Main.class.getName()).log(Level.SEVERE,
+					null, ex);
+			}
 
 			IO.printInfo("Saving wallet to " + walletFile);
 			cards.saveToFile(walletFile);

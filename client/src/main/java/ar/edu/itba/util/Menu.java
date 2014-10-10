@@ -2,8 +2,6 @@ package ar.edu.itba.util;
 
 import java.util.LinkedHashMap;
 import java.util.Map;
-import java.util.logging.Level;
-import java.util.logging.Logger;
 
 /**
  * Class implementing a menu with multiple choices and error detection. Items
@@ -124,8 +122,11 @@ public class Menu
 
 	/**
 	 * Starts the menu.
+	 *
+	 * @throws java.lang.Exception any issue that can occur from the item's
+	 * execution
 	 */
-	public void run()
+	public void run() throws Exception
 	{
 		String userEntry;
 		MenuItem choosenItem;
@@ -144,13 +145,7 @@ public class Menu
 			} else
 			{
 				IO.printlnInfo(choosenItem.getName());
-				try
-				{
-					choosenItem.runItem();
-				} catch (Exception ex)
-				{
-					Logger.getLogger(Menu.class.getName()).log(Level.SEVERE, null, ex);
-				}
+				choosenItem.runItem();
 			}
 			IO.println();
 			printMenuLoop();

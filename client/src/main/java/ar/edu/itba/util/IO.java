@@ -9,6 +9,14 @@ import java.io.InputStreamReader;
  */
 public class IO
 {
+
+	public enum DefaultYesNo
+	{
+		YES,
+		NO,
+		NO_DEFAULT
+	};
+
 	private static final BufferedReader stdin
 		= new BufferedReader(new InputStreamReader(System.in));
 
@@ -137,6 +145,51 @@ public class IO
 			}
 		}
 		return res;
+	}
+
+	private static void printYesNoPrompt(DefaultYesNo mode)
+	{
+		IO.print("[" + (mode == DefaultYesNo.YES ? 'Y' : 'y')
+			+ '/' + (mode == DefaultYesNo.NO ? 'N' : 'n') + "]: ");
+	}
+
+	/**
+	 * Reads a value as a Yes/No question from the standard input and returns
+	 * it. If no default value is specified or incorrect value is entered,
+	 * blocks the execution flow until a valid float number is entered.
+	 *
+	 * @param mode the default value specification
+	 * @return the read double
+	 */
+	public static boolean readYesNo(DefaultYesNo mode)
+	{
+		String line;
+		while (true)
+		{
+			printYesNoPrompt(mode);
+			line = readLine();
+			if (line.equalsIgnoreCase("Y"))
+			{
+				return true;
+			}
+			if (line.equalsIgnoreCase("N"))
+			{
+				return false;
+			}
+			if (line.isEmpty())
+			{
+				if (mode == DefaultYesNo.YES)
+				{
+					return true;
+				}
+				if (mode == DefaultYesNo.NO)
+				{
+					return false;
+				}
+			}
+			// value entered is not valid or is empty (and required)
+			IO.printlnError("Please type “Y” or “N”");
+		}
 	}
 
 	/**
