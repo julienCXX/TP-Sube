@@ -19,8 +19,11 @@ public class Main extends BaseMain
 	{
 		super(args, DEFAULT_CLIENT_OPTIONS);
 		getRegistry();
+		System.out.println("s1");
 		setDelay();
+		System.out.println("s2");
 		final CardRegistry cardRegistry = Utils.lookupObject(CARD_REGISTRY_BIND);
+		System.out.println("s3");
 		final CardServiceRegistryImpl cardServiceRegistry = new CardServiceRegistryImpl();
 		bindObject(CARD_SERVICE_REGISTRY_BIND, cardServiceRegistry);
 
