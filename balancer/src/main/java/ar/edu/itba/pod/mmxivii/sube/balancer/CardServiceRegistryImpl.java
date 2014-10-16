@@ -25,6 +25,8 @@ public class CardServiceRegistryImpl extends UnicastRemoteObject implements
 			.synchronizedList(new ArrayList<CardService>());
 	private final Map<CardService, Integer> serviceConnections = Collections
 			.synchronizedMap(new HashMap<CardService, Integer>());
+	private final List<CardService> servicesToDisconnect = Collections
+			.synchronizedList(new ArrayList<CardService>());
 
 	protected CardServiceRegistryImpl() throws RemoteException {
 	}
@@ -42,7 +44,13 @@ public class CardServiceRegistryImpl extends UnicastRemoteObject implements
 	public void unRegisterService(@Nonnull CardService service)
 			throws RemoteException {
 		if (serviceList.contains(service)) {
-			serviceList.remove(service);
+			if (serviceConnections.get(service) <= 0) {
+				//no esta haciendo ninguna operacion, entonces puede desconectarse tranquilamente
+				serviceList.remove(service);
+			} else {
+				// se lo agrega para desconectar y, cuando termina todas las operaciones que tenia que hacer, se desconecta
+				servicesToDisconnect.add(service);
+			}
 		}
 	}
 
@@ -54,12 +62,16 @@ public class CardServiceRegistryImpl extends UnicastRemoteObject implements
 	}
 
 	CardService getCardService() {
-		CardService s=null;
-		Integer connectionsQty= Integer.MAX_VALUE;
+		CardService s = null;
+		Integer connectionsQty = Integer.MAX_VALUE;
 		for (Entry<CardService, Integer> e : serviceConnections.entrySet()) {
-			if(e.getValue()< connectionsQty){
-				s=e.getKey();
-				connectionsQty=e.getValue();
+			//si no esta para desconectarse
+			if (!servicesToDisconnect.contains(e.getKey())) {
+				if (e.getValue() < connectionsQty) {
+
+					s = e.getKey();
+					connectionsQty = e.getValue();
+				}
 			}
 		}
 		return s;
