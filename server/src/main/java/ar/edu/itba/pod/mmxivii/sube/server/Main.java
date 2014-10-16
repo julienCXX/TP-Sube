@@ -5,6 +5,7 @@ import ar.edu.itba.pod.mmxivii.sube.common.Card;
 
 import javax.annotation.Nonnull;
 import java.io.*;
+import java.net.ConnectException;
 import java.rmi.RemoteException;
 import java.util.Scanner;
 
@@ -24,7 +25,12 @@ public class Main extends BaseMain
 
 		storeFile = cmdLine.getOptionValue(STORE_FILE_O_L, STORE_FILE_O_D);
 		cardRegistry = getOrCreateCardRegistry();
-		bindObject(CARD_REGISTRY_BIND, cardRegistry);
+        try{
+            bindObject(CARD_REGISTRY_BIND, cardRegistry);
+        }catch (RuntimeException ce){
+            createRegistry();
+            bindObject(CARD_REGISTRY_BIND, cardRegistry);
+        }
 	}
 
 	public static void main(@Nonnull String[] args) throws Exception
