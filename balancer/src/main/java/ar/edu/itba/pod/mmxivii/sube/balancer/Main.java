@@ -11,51 +11,57 @@ import java.util.Scanner;
 
 import static ar.edu.itba.pod.mmxivii.sube.common.Utils.*;
 
-public class Main extends BaseMain
-{
+public class Main extends BaseMain {
 	private static Main main = null;
 
-	private Main(@Nonnull String[] args) throws RemoteException, NotBoundException
-	{
+	private Main(@Nonnull String[] args) throws RemoteException,
+			NotBoundException {
 		super(args, DEFAULT_CLIENT_OPTIONS);
 		getRegistry();
 		System.out.println("s1");
 		setDelay();
 		System.out.println("s2");
-		final CardRegistry cardRegistry = Utils.lookupObject(CARD_REGISTRY_BIND);
+		createRegistry();
+		boolean waiting = true;
+		CardRegistry cardRegistry = null;
+		while (waiting) {
+			try {
+				cardRegistry = Utils.lookupObject(CARD_REGISTRY_BIND);
+				waiting = false;
+			} catch (Exception e) {
+				waiting = true;
+			}
+		}
 		System.out.println("s3");
 		final CardServiceRegistryImpl cardServiceRegistry = new CardServiceRegistryImpl();
 		bindObject(CARD_SERVICE_REGISTRY_BIND, cardServiceRegistry);
 
-		final CardClientImpl cardClient = new CardClientImpl(cardRegistry, cardServiceRegistry);
+		final CardClientImpl cardClient = new CardClientImpl(cardRegistry,
+				cardServiceRegistry);
 		bindObject(CARD_CLIENT_BIND, cardClient);
 	}
 
-	public static void main(@Nonnull String[] args) throws Exception
-	{
+	public static void main(@Nonnull String[] args) throws Exception {
 		main = new Main(args);
 		main.run();
 	}
 
-	private void run()
-	{
+	private void run() {
 		System.out.println("Starting Balancer!");
 		final Scanner scan = new Scanner(System.in);
 		String line;
 		do {
 			line = scan.next();
 			System.out.println("Balancer running");
-		} while(!"x".equals(line));
+		} while (!"x".equals(line));
 		shutdown();
 		System.out.println("Balancer exit.");
 		System.exit(0);
 
 	}
 
-	public static void shutdown()
-	{
+	public static void shutdown() {
 		main.unbindObject(CARD_SERVICE_REGISTRY_BIND);
 		main.unbindObject(CARD_CLIENT_BIND);
 	}
 }
-
