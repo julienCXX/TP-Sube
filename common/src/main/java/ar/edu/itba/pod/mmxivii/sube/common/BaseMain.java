@@ -39,7 +39,7 @@ public abstract class BaseMain
 		final int port = Integer.valueOf(cmdLine.getOptionValue(PORT_O_L, PORT_O_D));
 		final String maxThreads = cmdLine.getOptionValue(MAX_THREADS_O_L, MAX_THREADS_O_D);
 		System.setProperty(MAX_THREADS_JAVA_PROPERTY, maxThreads);
-
+		System.out.println(port);		//TODO
 		rmiRegistry = Utils.getRegistry(host, port);
 	}
 
