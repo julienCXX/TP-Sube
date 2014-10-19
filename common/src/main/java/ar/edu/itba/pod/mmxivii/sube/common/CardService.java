@@ -45,8 +45,4 @@ public interface CardService extends Remote
 	double recharge(@Nonnull UID id, @Nonnull String description, double amount) throws RemoteException;
 
 
-    /***
-     * El servicio pasa a ser el coordinador, encargado de bajar al servidor los cambios en las cache
-     */
-    void setAsCoordinator();
 }
