@@ -109,4 +109,6 @@ public class CardClientImpl extends UnicastRemoteObject implements CardClient {
 	private void leaveOperation(CardService service) {
 		cardServiceRegistry.leaveOperation(service);
 	}
+
+	
 }
