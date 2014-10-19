@@ -43,6 +43,9 @@ public class CardClientImpl extends UnicastRemoteObject implements CardClient {
 				// que cambiar esto en el contrato para avisar)
 				return null; // @ToDo cambiar a algo más representativo
 			}
+			catch (RemoteException e1){
+				return null;
+			}
 		}
 	}
 
@@ -63,11 +66,15 @@ public class CardClientImpl extends UnicastRemoteObject implements CardClient {
 			} catch (NotBoundException e1) {
 				return null; // @ToDo cambiar a algo más representativo
 			}
+			catch (RemoteException e1){
+				return null;
+			}
 		}
 	}
 
 	@Override
 	public double getCardBalance(@Nonnull UID id) throws RemoteException {
+		
 		CardService s = getCardService();
 		assignOperation(s);
 		double result = s.getCardBalance(id);

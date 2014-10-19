@@ -117,5 +117,12 @@ public class CardServiceRegistryImpl extends UnicastRemoteObject implements
 			serviceConnections.put(service, operations);
 		}
 	}
+	
+	private void troubleshootFailedService(CardService service){
+		if(serviceList.contains(service)){
+			serviceList.remove(service);
+			serviceConnections.remove(service);
+		}
+	}
 
 }
