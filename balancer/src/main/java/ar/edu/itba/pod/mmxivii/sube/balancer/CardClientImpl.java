@@ -98,7 +98,7 @@ public class CardClientImpl extends UnicastRemoteObject implements CardClient {
 		return result;
 	}
 
-	private CardService getCardService() {
+    private CardService getCardService() {
 		return cardServiceRegistry.getCardService();
 	}
 

@@ -25,13 +25,9 @@ public class Main extends BaseMain {
 		try {
 			bindObject(CARD_REGISTRY_BIND, cardRegistry);
 		} catch (RuntimeException e) {
-			System.out.println("entro al try");
 			createRegistry();
-			System.out.println("creao registro");
 			bindObject(CARD_REGISTRY_BIND, cardRegistry);
-			System.out.println("bindeo??");
 		}
-		System.out.println("bindeo bien :)");
 	}
 
 	public static void main(@Nonnull String[] args) throws Exception {
