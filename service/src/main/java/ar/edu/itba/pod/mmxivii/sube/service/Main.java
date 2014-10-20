@@ -45,7 +45,9 @@ public class Main extends BaseMain implements Receiver {
              */
             obtainCardRegistryInstance();
 
-            obtainInstancesFromRMI();
+            buildCardService();
+
+            obtainCardServiceRegistryFromBalancer();
 
         }catch (EndOfProgramException eop){
             System.out.println(eop.getMessage());
@@ -53,6 +55,16 @@ public class Main extends BaseMain implements Receiver {
         }
 
 	}
+
+    private void obtainCardServiceRegistryFromBalancer() throws EndOfProgramException {
+        try {
+            cardServiceRegistry = Utils.lookupObject(CARD_SERVICE_REGISTRY_BIND);
+        } catch (NotBoundException e) {
+            throw new EndOfProgramException(
+                    String.format("No se pudieron obtener %s desde el balancer", CARD_SERVICE_REGISTRY_BIND)
+            );
+        }
+    }
 
     private void obtainCardRegistryInstance() throws EndOfProgramException {
         cardRegistry = getCardRegistryFromAnyCluster();
@@ -88,7 +100,7 @@ public class Main extends BaseMain implements Receiver {
         System.exit(0);
     }
 
-    private void obtainInstancesFromRMI() throws EndOfProgramException {
+    private void buildCardService() throws EndOfProgramException {
         try{
             getRegistry();
             cardService = new CardServiceImpl(cardRegistry, channel);
@@ -117,6 +129,13 @@ public class Main extends BaseMain implements Receiver {
 
 	private void run() throws RemoteException
 	{
+
+
+
+
+
+
+
 		cardServiceRegistry.registerService(cardService);
 		System.out.println("Starting Service!");
 		final Scanner scan = new Scanner(System.in);

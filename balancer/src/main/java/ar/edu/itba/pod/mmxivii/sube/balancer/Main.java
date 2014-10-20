@@ -21,7 +21,7 @@ public class Main extends BaseMain {
 		System.out.println("s1");
 		setDelay();
 		System.out.println("s2");
-		//createRegistry();
+		createRegistry();
 		boolean waiting = true;
 		CardRegistry cardRegistry = null;
 		while (waiting) {
