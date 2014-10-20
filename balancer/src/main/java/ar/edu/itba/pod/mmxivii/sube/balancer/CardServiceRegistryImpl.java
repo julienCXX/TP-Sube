@@ -27,6 +27,7 @@ public class CardServiceRegistryImpl extends UnicastRemoteObject implements
 			.synchronizedMap(new HashMap<CardService, Integer>());
 	private final List<CardService> servicesToDisconnect = Collections
 			.synchronizedList(new ArrayList<CardService>());
+	private CardService coordinator = null;
 
 	protected CardServiceRegistryImpl() throws RemoteException {
 	}
@@ -37,6 +38,10 @@ public class CardServiceRegistryImpl extends UnicastRemoteObject implements
 		if (!serviceList.contains(service)) {
 			serviceList.add(service);
 			serviceConnections.put(service, 0);
+			if (coordinator == null) {
+				// service.setAsCoordinator();
+				coordinator = service;
+			}
 		}
 	}
 
@@ -45,10 +50,12 @@ public class CardServiceRegistryImpl extends UnicastRemoteObject implements
 			throws RemoteException {
 		if (serviceList.contains(service)) {
 			if (serviceConnections.get(service) <= 0) {
-				//no esta haciendo ninguna operacion, entonces puede desconectarse tranquilamente
+				// no esta haciendo ninguna operacion, entonces puede
+				// desconectarse tranquilamente
 				serviceList.remove(service);
 			} else {
-				// se lo agrega para desconectar y, cuando termina todas las operaciones que tenia que hacer, se desconecta
+				// se lo agrega para desconectar y, cuando termina todas las
+				// operaciones que tenia que hacer, se desconecta
 				servicesToDisconnect.add(service);
 			}
 		}
@@ -65,7 +72,7 @@ public class CardServiceRegistryImpl extends UnicastRemoteObject implements
 		CardService s = null;
 		Integer connectionsQty = Integer.MAX_VALUE;
 		for (Entry<CardService, Integer> e : serviceConnections.entrySet()) {
-			//si no esta para desconectarse
+			// si no esta para desconectarse
 			if (!servicesToDisconnect.contains(e.getKey())) {
 				if (e.getValue() < connectionsQty) {
 
@@ -88,6 +95,18 @@ public class CardServiceRegistryImpl extends UnicastRemoteObject implements
 
 		if (service != null && serviceList.contains(service)) {
 			deltaOperation(service, LEAVE_OPERATION);
+			if (servicesToDisconnect.contains(service)) {
+				if (serviceConnections.get(service) == 0) {
+					serviceConnections.remove(service);
+					serviceList.remove(service);
+					if (coordinator.equals(service)) {
+						coordinator = serviceList.get(0);
+
+					}
+
+				}
+			}
+
 		}
 	}
 
@@ -96,6 +115,13 @@ public class CardServiceRegistryImpl extends UnicastRemoteObject implements
 		operations = operations + qty;
 		if (operations >= 0) {
 			serviceConnections.put(service, operations);
+		}
+	}
+	
+	private void troubleshootFailedService(CardService service){
+		if(serviceList.contains(service)){
+			serviceList.remove(service);
+			serviceConnections.remove(service);
 		}
 	}
 
