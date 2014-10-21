@@ -117,5 +117,9 @@ public class CardClientImpl extends UnicastRemoteObject implements CardClient {
 		cardServiceRegistry.leaveOperation(service);
 	}
 
-	
+    @Override
+    public void synchronizeToServer() throws RemoteException {
+
+    }
+
 }

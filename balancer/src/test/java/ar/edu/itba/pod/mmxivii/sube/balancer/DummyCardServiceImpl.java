@@ -25,4 +25,10 @@ public class DummyCardServiceImpl implements CardService
 	{
 		return 0;
 	}
+
+    @Override
+    public void synchronizeToServer() throws RemoteException {
+
+    }
+
 }

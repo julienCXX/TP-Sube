@@ -118,7 +118,6 @@ public class Main extends BaseMain implements Receiver {
             throw new EndOfProgramException("No me pude conectar al cluster");
         }
 
-
     }
 
     public static void main(@Nonnull String[] args) throws Exception
@@ -129,13 +128,6 @@ public class Main extends BaseMain implements Receiver {
 
 	private void run() throws RemoteException
 	{
-
-
-
-
-
-
-
 		cardServiceRegistry.registerService(cardService);
 		System.out.println("Starting Service!");
 		final Scanner scan = new Scanner(System.in);
