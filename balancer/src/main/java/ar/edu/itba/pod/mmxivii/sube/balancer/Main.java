@@ -8,16 +8,21 @@ import javax.annotation.Nonnull;
 
 import java.rmi.NotBoundException;
 import java.rmi.RemoteException;
+import java.rmi.server.UID;
+import java.util.Map.Entry;
 import java.util.Scanner;
+import java.util.concurrent.ConcurrentHashMap;
+import java.util.concurrent.ConcurrentMap;
 import java.util.concurrent.Executors;
 
 import static ar.edu.itba.pod.mmxivii.sube.common.Utils.*;
 
 public class Main extends BaseMain {
-	
-	private static String SYNCHRONIZE="sync";
+
+	private static String SYNCHRONIZE = "sync";
 	private static Main main = null;
 	private CardServiceRegistryImpl cardServiceRegistry;
+
 	private Main(@Nonnull String[] args) throws RemoteException,
 			NotBoundException {
 		super(args, DEFAULT_CLIENT_OPTIONS);
@@ -52,16 +57,22 @@ public class Main extends BaseMain {
 
 	private void run() {
 		System.out.println("Starting Balancer!");
-		Executors.newSingleThreadExecutor().execute(new SynchronizedThread(cardServiceRegistry));
+		Executors.newSingleThreadExecutor().execute(
+				new SynchronizedThread(cardServiceRegistry));
 		final Scanner scan = new Scanner(System.in);
 		String line;
 		do {
 			line = scan.next();
-			if(line.equals(Main.SYNCHRONIZE)){
-				
+			if (line.equals(Main.SYNCHRONIZE)) {
+
 				try {
-					
-					main.cardServiceRegistry.getCoordinator().synchronizeToServer();
+
+					ConcurrentHashMap<UID, Double> map = main.cardServiceRegistry
+							.getCoordinator().synchronizeToServer();
+					System.out.println("Usuarios");
+					for (Entry<UID, Double> e : map.entrySet()) {
+						System.out.println(e.getKey()+" Monto: "+e.getValue() );
+					}
 				} catch (RemoteException e) {
 					System.out.println("Error - Reintente");
 				}
@@ -82,8 +93,8 @@ public class Main extends BaseMain {
 	private static class SynchronizedThread implements Runnable {
 
 		private CardServiceRegistryImpl serviceRegistry;
-		private static long TIME_TO_WAIT= 90000; //un minuto y medio
-		
+		private static long TIME_TO_WAIT = 90000; // un minuto y medio
+
 		public SynchronizedThread(CardServiceRegistryImpl service) {
 			this.serviceRegistry = service;
 
@@ -94,15 +105,15 @@ public class Main extends BaseMain {
 				try {
 					Thread.sleep(TIME_TO_WAIT);
 				} catch (InterruptedException e) {
-				//	e.printStackTrace();
+					// e.printStackTrace();
 				}
 				try {
 					serviceRegistry.getCoordinator().synchronizeToServer();
 					System.out.println("Cache sincronizado con exito");
 				} catch (RemoteException e) {
-					//e.printStackTrace();
+					// e.printStackTrace();
 				}
-			}	
+			}
 		}
 	}
 }
