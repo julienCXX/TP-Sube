@@ -13,7 +13,10 @@ import java.rmi.server.UnicastRemoteObject;
 public class CardServiceImpl extends UnicastRemoteObject implements CardService
 {
 	private static final long serialVersionUID = 2919260533266908792L;
-	@Nonnull
+
+    private LocalCardRegistry localCardRegistry;
+
+    @Nonnull
 	private final CardRegistry cardRegistry;
 
     @Nonnull
@@ -24,6 +27,7 @@ public class CardServiceImpl extends UnicastRemoteObject implements CardService
 		super(0);
 		this.cardRegistry = cardRegistry;
         this.channel = channel;
+        localCardRegistry = new LocalCardRegistry();
     }
 
 	@Override
@@ -55,7 +59,7 @@ public class CardServiceImpl extends UnicastRemoteObject implements CardService
      * @throws RemoteException
      */
     private double doCardOperation(UID id, String description, double amount) throws RemoteException {
-        double balance = cardRegistry.addCardOperation(id, description, amount);
+        double balance = localCardRegistry.addCardOperation(id, description, amount);
         if( balance >= 0 ){
             OperationDTO dto = new OperationDTO(id, description, amount );
             sendMessageToClusters(dto);
@@ -85,10 +89,15 @@ public class CardServiceImpl extends UnicastRemoteObject implements CardService
      * @throws RemoteException
      */
     protected void updateOperation( OperationDTO dto ) throws RemoteException {
-        /*cardRegistry.addCardOperation( dto.id, dto.description, dto.amount );*/
+        localCardRegistry.addCardOperation( dto.id, dto.description, dto.amount );
     }
 
 
     @Override
-    public void synchronizeToServer() throws RemoteException {}
+    public void synchronizeToServer() throws RemoteException {
+        //bajar al server
+        localCardRegistry.synchronizeToSCardRegistry(cardRegistry);
+
+        //TODO: mandar mensaje al resto de los caches para que reinicien sus localCardRegistry
+    }
 }
