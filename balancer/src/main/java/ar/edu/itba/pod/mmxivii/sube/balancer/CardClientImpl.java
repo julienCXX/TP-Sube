@@ -22,7 +22,7 @@ import static ar.edu.itba.pod.mmxivii.sube.common.Utils.delay;
 
 public class CardClientImpl extends UnicastRemoteObject implements CardClient {
 	private static final long serialVersionUID = 3498345765116694167L;
-	private static final long TIME_OUT = 1000; // en milisegundos
+	private static final long TIME_OUT = 50; // en milisegundos
 	private CardRegistry cardRegistry;
 	private final CardServiceRegistryImpl cardServiceRegistry;
 
@@ -92,7 +92,6 @@ public class CardClientImpl extends UnicastRemoteObject implements CardClient {
 		// leaveOperation(s);
 
 		ExecutorService es = Executors.newCachedThreadPool();
-		CountDownLatch done = new CountDownLatch(1);
 		TimeoutTravelChecker TimeoutCheck = new TimeoutTravelChecker(
 				cardServiceRegistry, this, Action.GETCARDBALANCE, id, "", 0);
 
@@ -130,18 +129,18 @@ public class CardClientImpl extends UnicastRemoteObject implements CardClient {
 				cardServiceRegistry, this, Action.TRAVEL, id, "", 0);
 		es.execute(TimeoutCheck);
 
-		boolean timeout;
 		try {
-			timeout = done
-					.await(CardClientImpl.TIME_OUT, TimeUnit.MILLISECONDS);
-			if (!timeout) {
+			if (es.awaitTermination(CardClientImpl.TIME_OUT,
+					TimeUnit.MILLISECONDS)) {
 				return CardRegistry.SERVICE_TIMEOUT;
+			} else {
+				return TimeoutCheck.getResult();
 			}
-
-			return TimeoutCheck.getResult();
 		} catch (InterruptedException e) {
-			return CardRegistry.COMMUNICATIONS_FAILURE;
+			return CardRegistry.CANNOT_PROCESS_REQUEST;
 		}
+
+		
 	}
 
 	@Override
@@ -164,17 +163,15 @@ public class CardClientImpl extends UnicastRemoteObject implements CardClient {
 				cardServiceRegistry, this, Action.RECHARGE, id, "", 0);
 		es.execute(TimeoutCheck);
 
-		boolean timeout;
 		try {
-			timeout = done
-					.await(CardClientImpl.TIME_OUT, TimeUnit.MILLISECONDS);
-			if (!timeout) {
+			if (es.awaitTermination(CardClientImpl.TIME_OUT,
+					TimeUnit.MILLISECONDS)) {
 				return CardRegistry.SERVICE_TIMEOUT;
+			} else {
+				return TimeoutCheck.getResult();
 			}
-
-			return TimeoutCheck.getResult();
 		} catch (InterruptedException e) {
-			return CardRegistry.COMMUNICATIONS_FAILURE;
+			return CardRegistry.CANNOT_PROCESS_REQUEST;
 		}
 	}
 
