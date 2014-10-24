@@ -53,6 +53,8 @@ public class CardServiceRegistryImpl extends UnicastRemoteObject implements
 				// no esta haciendo ninguna operacion, entonces puede
 				// desconectarse tranquilamente
 				serviceList.remove(service);
+				serviceConnections.remove(service);
+				coordinator=serviceList.get(0);
 			} else {
 				// se lo agrega para desconectar y, cuando termina todas las
 				// operaciones que tenia que hacer, se desconecta
@@ -118,11 +120,15 @@ public class CardServiceRegistryImpl extends UnicastRemoteObject implements
 		}
 	}
 	
-	private void troubleshootFailedService(CardService service){
+	void troubleshootFailedService(CardService service){
 		if(serviceList.contains(service)){
 			serviceList.remove(service);
 			serviceConnections.remove(service);
 		}
 	}
 
+	public CardService getCoordinator(){
+		return this.coordinator;
+	}
+	
 }

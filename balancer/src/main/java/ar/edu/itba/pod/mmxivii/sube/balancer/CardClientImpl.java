@@ -42,8 +42,7 @@ public class CardClientImpl extends UnicastRemoteObject implements CardClient {
 				// noinspection ConstantConditions (esto no deberia pasar, hay
 				// que cambiar esto en el contrato para avisar)
 				return null; // @ToDo cambiar a algo más representativo
-			}
-			catch (RemoteException e1){
+			} catch (RemoteException e1) {
 				return null;
 			}
 		}
@@ -65,8 +64,7 @@ public class CardClientImpl extends UnicastRemoteObject implements CardClient {
 				return cardRegistry.getCard(checkNotNull(id));
 			} catch (NotBoundException e1) {
 				return null; // @ToDo cambiar a algo más representativo
-			}
-			catch (RemoteException e1){
+			} catch (RemoteException e1) {
 				return null;
 			}
 		}
@@ -74,13 +72,19 @@ public class CardClientImpl extends UnicastRemoteObject implements CardClient {
 
 	@Override
 	public double getCardBalance(@Nonnull UID id) throws RemoteException {
-		
+
 		CardService s = getCardService();
 		assignOperation(s);
-		double result = s.getCardBalance(id);
+		double result;
+		try {
+			result = s.getCardBalance(id);
+		} catch (ConnectException e) {
+			cardServiceRegistry.troubleshootFailedService(s);
+			return CardRegistry.COMMUNICATIONS_FAILURE;
+		}
 		leaveOperation(s);
 		return result;
-		
+
 	}
 
 	@Override
@@ -88,7 +92,13 @@ public class CardClientImpl extends UnicastRemoteObject implements CardClient {
 			double amount) throws RemoteException {
 		CardService s = getCardService();
 		assignOperation(s);
-		double result = s.travel(id, description, amount);
+		double result;
+		try {
+			result = s.travel(id, description, amount);
+		} catch (ConnectException e) {
+			cardServiceRegistry.troubleshootFailedService(s);
+			return CardRegistry.COMMUNICATIONS_FAILURE;
+		}
 		leaveOperation(s);
 		return result;
 
@@ -100,12 +110,18 @@ public class CardClientImpl extends UnicastRemoteObject implements CardClient {
 		CardService s = getCardService();
 		assignOperation(s);
 		// @ToDo catch de excepciones
-		double result = s.recharge(id, description, amount);
+		double result;
+		try {
+			result = s.recharge(id, description, amount);
+		} catch (ConnectException e) {
+			cardServiceRegistry.troubleshootFailedService(s);
+			return CardRegistry.COMMUNICATIONS_FAILURE;
+		}
 		leaveOperation(s);
 		return result;
 	}
 
-    private CardService getCardService() {
+	private CardService getCardService() {
 		return cardServiceRegistry.getCardService();
 	}
 
@@ -117,9 +133,9 @@ public class CardClientImpl extends UnicastRemoteObject implements CardClient {
 		cardServiceRegistry.leaveOperation(service);
 	}
 
-    @Override
-    public void synchronizeToServer() throws RemoteException {
+	@Override
+	public void synchronizeToServer() throws RemoteException {
 
-    }
+	}
 
 }
