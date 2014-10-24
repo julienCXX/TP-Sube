@@ -72,7 +72,7 @@ public class CardClientImpl extends UnicastRemoteObject implements CardClient {
 
 	@Override
 	public double getCardBalance(@Nonnull UID id) throws RemoteException {
-
+		
 		CardService s = getCardService();
 		assignOperation(s);
 		double result;
