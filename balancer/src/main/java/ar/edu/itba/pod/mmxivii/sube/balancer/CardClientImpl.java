@@ -9,6 +9,7 @@ import java.rmi.NotBoundException;
 import java.rmi.RemoteException;
 import java.rmi.server.UID;
 import java.rmi.server.UnicastRemoteObject;
+import java.util.concurrent.ConcurrentHashMap;
 
 import static ar.edu.itba.pod.mmxivii.sube.common.Utils.CARD_REGISTRY_BIND;
 import static ar.edu.itba.pod.mmxivii.sube.common.Utils.checkNotNull;
@@ -134,8 +135,8 @@ public class CardClientImpl extends UnicastRemoteObject implements CardClient {
 	}
 
 	@Override
-	public void synchronizeToServer() throws RemoteException {
-
+	public ConcurrentHashMap<UID, Double> synchronizeToServer() throws RemoteException {
+        return null;
 	}
 
 }
