@@ -14,6 +14,8 @@ import java.util.concurrent.Executors;
 import static ar.edu.itba.pod.mmxivii.sube.common.Utils.*;
 
 public class Main extends BaseMain {
+	
+	private static String SYNCHRONIZE="sync";
 	private static Main main = null;
 	private CardServiceRegistryImpl cardServiceRegistry;
 	private Main(@Nonnull String[] args) throws RemoteException,
@@ -55,6 +57,15 @@ public class Main extends BaseMain {
 		String line;
 		do {
 			line = scan.next();
+			if(line.equals(Main.SYNCHRONIZE)){
+				
+				try {
+					
+					main.cardServiceRegistry.getCoordinator().synchronizeToServer();
+				} catch (RemoteException e) {
+					System.out.println("Error - Reintente");
+				}
+			}
 			System.out.println("Balancer running");
 		} while (!"x".equals(line));
 		shutdown();
