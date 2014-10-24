@@ -5,6 +5,7 @@ import ar.edu.itba.pod.mmxivii.sube.common.CardService;
 import javax.annotation.Nonnull;
 import java.rmi.RemoteException;
 import java.rmi.server.UID;
+import java.util.concurrent.ConcurrentHashMap;
 
 public class DummyCardServiceImpl implements CardService
 {
@@ -27,8 +28,8 @@ public class DummyCardServiceImpl implements CardService
 	}
 
     @Override
-    public void synchronizeToServer() throws RemoteException {
-
+    public ConcurrentHashMap<UID, Double> synchronizeToServer() throws RemoteException {
+        return null;
     }
 
 }

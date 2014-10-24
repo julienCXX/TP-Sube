@@ -9,6 +9,7 @@ import javax.annotation.Nonnull;
 import java.rmi.RemoteException;
 import java.rmi.server.UID;
 import java.rmi.server.UnicastRemoteObject;
+import java.util.concurrent.ConcurrentHashMap;
 
 public class CardServiceImpl extends UnicastRemoteObject implements CardService
 {
@@ -94,10 +95,12 @@ public class CardServiceImpl extends UnicastRemoteObject implements CardService
 
 
     @Override
-    public void synchronizeToServer() throws RemoteException {
+    public ConcurrentHashMap<UID, Double> synchronizeToServer() throws RemoteException {
         //bajar al server
-        localCardRegistry.synchronizeToSCardRegistry(cardRegistry);
+        ConcurrentHashMap<UID, Double> updatedBalance = localCardRegistry.synchronizeToSCardRegistry(cardRegistry);
 
         //TODO: mandar mensaje al resto de los caches para que reinicien sus localCardRegistry
+
+        return updatedBalance;
     }
 }

@@ -4,6 +4,7 @@ import javax.annotation.Nonnull;
 import java.rmi.Remote;
 import java.rmi.RemoteException;
 import java.rmi.server.UID;
+import java.util.concurrent.ConcurrentHashMap;
 
 public interface CardService extends Remote
 {
@@ -45,5 +46,5 @@ public interface CardService extends Remote
 	double recharge(@Nonnull UID id, @Nonnull String description, double amount) throws RemoteException;
 
 
-    public void synchronizeToServer() throws RemoteException;
+    public ConcurrentHashMap<UID, Double> synchronizeToServer() throws RemoteException;
 }

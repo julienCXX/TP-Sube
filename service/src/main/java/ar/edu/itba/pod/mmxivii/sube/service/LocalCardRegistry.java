@@ -32,10 +32,11 @@ public class LocalCardRegistry {
         return result;
     }
 
-    public void synchronizeToSCardRegistry(CardRegistry cardRegistry) throws RemoteException {
+    public ConcurrentHashMap<UID, Double> synchronizeToSCardRegistry(CardRegistry cardRegistry) throws RemoteException {
         for(UID aUID : balances.keySet()){
             cardRegistry.addCardOperation(aUID, "charge", balances.get(aUID));
         }
+        return balances;
     }
 
     public void clearBalance(){
