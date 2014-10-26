@@ -1,6 +1,7 @@
 package ar.edu.itba.pod.mmxivii.sube.client.items;
 
 import ar.edu.itba.pod.mmxivii.sube.client.CardWallet;
+import ar.edu.itba.pod.mmxivii.sube.client.exceptions.CardNotFoundException;
 import ar.edu.itba.pod.mmxivii.sube.client.items.generic.ClientRootMenuItem;
 import ar.edu.itba.pod.mmxivii.sube.common.Card;
 import ar.edu.itba.pod.mmxivii.sube.common.CardClient;
@@ -26,11 +27,27 @@ public class CreateNewCard extends ClientRootMenuItem
 		owner = IO.readLine();
 		IO.print("Enter a label: ");
 		label = IO.readLine();
-		card = cardClient.newCard(owner, label);
+		try
+		{
+			card = cardClient.newCard(owner, label);
+		} catch (IllegalArgumentException iae)
+		{
+			// bad characters in string
+			IO.printlnError(iae.getMessage());
+			return;
+		}
+
 		IO.printlnInfo("Card successfully created");
 		IO.println();
 		cards.add(card);
-		new CardMenu(cardClient, card).runItem();
+		try
+		{
+			new CardMenu(cardClient, card).runItem();
+		} catch (CardNotFoundException cnfe)
+		{
+			// only if the server refuses the card creation
+			IO.printlnError(cnfe.getMessage());
+		}
 	}
 
 }
