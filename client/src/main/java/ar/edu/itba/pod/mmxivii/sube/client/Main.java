@@ -2,6 +2,8 @@ package ar.edu.itba.pod.mmxivii.sube.client;
 
 import ar.edu.itba.pod.mmxivii.sube.client.items.CreateNewCard;
 import ar.edu.itba.pod.mmxivii.sube.client.items.UseExistingCard;
+import ar.edu.itba.pod.mmxivii.sube.client.robot.RobotClient;
+import ar.edu.itba.pod.mmxivii.sube.client.robot.RobotParameters;
 import ar.edu.itba.pod.mmxivii.sube.common.BaseMain;
 import ar.edu.itba.pod.mmxivii.sube.common.CardClient;
 import ar.edu.itba.pod.mmxivii.sube.common.Utils;
@@ -35,7 +37,8 @@ public class Main extends BaseMain
 	public static void main(@Nonnull String[] args) throws Exception
 	{
 		final Main main = new Main(args);
-		main.run();
+		//main.run();
+		main.runAuto();
 	}
 
 	private void run() throws RemoteException
@@ -73,6 +76,14 @@ public class Main extends BaseMain
 		{
 			Logger.getLogger(Main.class.getName()).log(Level.SEVERE, null, ex);
 		}
+	}
+
+	// TODO: let the user choose the execution mode
+	private void runAuto()
+	{
+		RobotParameters p = new RobotParameters(5, 100, 5, 40, 5, true);
+		RobotClient rc = new RobotClient(cardClient, p);
+		rc.run();
 	}
 
 }
