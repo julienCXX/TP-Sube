@@ -216,7 +216,7 @@ public class CardClientImpl extends UnicastRemoteObject implements CardClient {
 
 		@Override
 		public void run() {
-			CardService s = c.getCardService();
+			CardService s = cardRegistry.getCardService();
 			if (action.equals(Action.GETCARDBALANCE)) {
 				c.assignOperation(s);
 
