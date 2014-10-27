@@ -169,6 +169,36 @@ public class Utils
 		if (!skipDelay) try { Thread.sleep(RANDOM.nextInt(MAX_DELTA) + MIN_DELAY); } catch (InterruptedException ignore) {}
 	}
 
+	public static int randomInt(int min, int max)
+	{
+		int lMin, lMax;
+		if (min > max)
+		{
+			lMin = max;
+			lMax = min;
+		} else
+		{
+			lMin = min;
+			lMax = max;
+		}
+		return RANDOM.nextInt(lMax - lMin) + lMin;
+	}
+
+	public static double randomDouble(double min, double max)
+	{
+		double lMin, lMax;
+		if (min > max)
+		{
+			lMin = max;
+			lMax = min;
+		} else
+		{
+			lMin = min;
+			lMax = max;
+		}
+		return RANDOM.nextDouble() * (lMax - lMin) + lMin;
+	}
+
 	public interface Invoke
 	{
 
