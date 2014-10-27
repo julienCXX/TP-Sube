@@ -37,8 +37,8 @@ public class Main extends BaseMain
 	public static void main(@Nonnull String[] args) throws Exception
 	{
 		final Main main = new Main(args);
-		//main.run();
-		main.runAuto();
+		main.run();
+		//main.runAuto();
 	}
 
 	private void run() throws RemoteException

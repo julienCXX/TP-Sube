@@ -28,7 +28,7 @@ public class CardServiceImpl extends UnicastRemoteObject implements CardService
 		super(0);
 		this.cardRegistry = cardRegistry;
         this.channel = channel;
-        localCardRegistry = new LocalCardRegistry();
+        localCardRegistry = new LocalCardRegistry(cardRegistry);
     }
 
 	@Override

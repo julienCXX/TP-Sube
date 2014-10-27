@@ -17,6 +17,11 @@ import static ar.edu.itba.pod.mmxivii.sube.common.CardRegistry.*;
 public class LocalCardRegistry {
 
     private final ConcurrentHashMap<UID, Double> balances = new ConcurrentHashMap<UID, Double>();
+    private CardRegistry cardRegistry;
+
+    public LocalCardRegistry(CardRegistry cardRegistry) {
+        this.cardRegistry = cardRegistry;
+    }
 
     public double addCardOperation(@Nonnull UID id, @Nonnull String description, double amount)
     {
@@ -24,6 +29,13 @@ public class LocalCardRegistry {
         assertText(description);
 
         Double result = balances.get(checkNotNull(id));
+        if(result == null){
+            try {
+                result = cardRegistry.getCardBalance(id);
+            } catch (RemoteException e) {
+                e.printStackTrace();
+            }
+        }
         if (result == null) return CARD_NOT_FOUND;
 
         result = result + amount;
