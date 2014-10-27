@@ -1,5 +1,6 @@
 package ar.edu.itba.pod.mmxivii.sube.client.robot;
 
+import ar.edu.itba.pod.mmxivii.sube.common.CardRegistry;
 import ar.edu.itba.pod.mmxivii.sube.common.Utils;
 
 /**
@@ -9,12 +10,43 @@ public class RobotParameters
 {
 
 	// default values
-	public static final double MIN_DELAY = 0.0;
-	public static final double MAX_DELAY = 3.0;
+	public static final int MIN_DELAY = 0;
+	public static final int MAX_DELAY = 3000;
 	public static final double MIN_OPERATION_AMOUNT = 2.0;
 	public static final double MAX_OPERATION_AMOUNT = 20.0;
 	public static final int NB_THREADS = 1;
 	public static final boolean CHECK_BALANCE_ON_EACH_OPERATION = false;
+
+	/**
+	 * Minimal balance before going from a sequence of travels to a sequence of
+	 * recharges.
+	 */
+	public static final double MIN_BALANCE_BEFORE_RECHARGE
+		= ((5.0 * CardRegistry.MAX_BALANCE) / 100.0);
+
+	/**
+	 * Maximal balance before going from a sequence of recharges to a sequence
+	 * of travels.
+	 */
+	public static final double MAX_BALANCE_BEFORE_TRAVEL
+		= CardRegistry.MAX_BALANCE
+		- ((5.0 * CardRegistry.MAX_BALANCE) / 100.0);
+
+	/**
+	 * Waiting time (ms) after a balance inconsticency between the robot and the
+	 * service.
+	 */
+	public static final int BALANCE_RESYNC_WAIT = 10000;
+
+	/**
+	 * Waiting time (ms) after an operation error (negative return code).
+	 */
+	public static final int OPERATION_ERROR_RESYNC_WAIT = 15000;
+
+	/**
+	 * Waiting time (ms) after a remote error (RemoteException).
+	 */
+	public static final int REMOTE_ERROR_RESYNC_WAIT = 20000;
 
 	// local values
 	private int minDelay;
