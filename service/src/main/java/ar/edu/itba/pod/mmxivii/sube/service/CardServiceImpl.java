@@ -93,14 +93,21 @@ public class CardServiceImpl extends UnicastRemoteObject implements CardService
         localCardRegistry.addCardOperation( dto.id, dto.description, dto.amount );
     }
 
+    protected void clearLocalBalance(){
+        localCardRegistry.clearBalance();
+    }
+
 
     @Override
     public ConcurrentHashMap<UID, Double> synchronizeToServer() throws RemoteException {
         //bajar al server
         ConcurrentHashMap<UID, Double> updatedBalance = localCardRegistry.synchronizeToSCardRegistry(cardRegistry);
 
-        //TODO: mandar mensaje al resto de los caches para que reinicien sus localCardRegistry
+        //mandar mensaje al resto de los caches para que reinicien sus localCardRegistry
+        sendMessageToClusters( OperationDTO.buildClearLocalRegistryMessage() );
 
         return updatedBalance;
     }
+
+
 }

@@ -158,14 +158,14 @@ public class CardClientImpl extends UnicastRemoteObject implements CardClient {
 		// }
 		// leaveOperation(s);
 		ExecutorService es = Executors.newCachedThreadPool();
-		CountDownLatch done = new CountDownLatch(1);
+		//CountDownLatch done = new CountDownLatch(1);
 		TimeoutTravelChecker TimeoutCheck = new TimeoutTravelChecker(
-				cardServiceRegistry, this, Action.RECHARGE, id, "", 0);
+				cardServiceRegistry, this, Action.RECHARGE, id, description, amount);
 		es.execute(TimeoutCheck);
 
 		try {
 			if (es.awaitTermination(CardClientImpl.TIME_OUT,
-					TimeUnit.MILLISECONDS)) {
+					TimeUnit.SECONDS)) {
 				return CardRegistry.SERVICE_TIMEOUT;
 			} else {
 				return TimeoutCheck.getResult();

@@ -165,12 +165,29 @@ public class Main extends BaseMain implements Receiver {
     public void receive(Message msg) {
         if (msg.getSrc() != this.channel.getAddress()) {
             OperationDTO dto = (OperationDTO) msg.getObject();
-            try {
-                cardService.updateOperation(dto);
-            } catch (RemoteException e) {
-                //TODO ver si hace falta controlar este error en el que no creo que se produzca
+
+            if(dto.isAMessage()){
+                if(dto.isClearLocalRegistry()){
+                    /**
+                     * Si es el mensaje clear balance entonces reinicio el mapa de balances local.
+                     * Esto pasa cuando el cordinador da la señal a cada uno de sus caches para que reinicien
+                     * el saldo una vez que sea sincronizado el labor de caches de un lapso con el server
+                     */
+                    cardService.clearLocalBalance();
+                }
+            }else{
+                /**
+                 * Actualizo el balance local de este cache con la operacion que otro cache a llevado a cabo
+                 */
+                try {
+                    cardService.updateOperation(dto);
+                } catch (RemoteException e) {
+                    //TODO ver si hace falta controlar este error en el que no creo que se produzca
+                }
+                System.out.println(msg.getSrc() + ": " + dto );
             }
-            System.out.println(msg.getSrc() + ": " + dto );
+
+
         }
     }
 
@@ -184,14 +201,18 @@ public class Main extends BaseMain implements Receiver {
 
     }
 
+    /**
+     * Se obtiene la instancia de cardRegistry que fue generada por el server pero ahora
+     * la tiene algun cache
+     *
+     * @return
+     * @throws EndOfProgramException
+     */
     public CardRegistry getCardRegistryFromAnyCluster() throws EndOfProgramException {
         try {
             getRegistry();
             cardRegistry = Utils.lookupObject(CACHE_CARD_REGISTRY_BIND);
         } catch ( Exception e) {
-           /* throw new EndOfProgramException(
-                String.format("No se pudieron obtener %s desde algun cache", CACHE_CARD_REGISTRY_BIND)
-            );*/
             return null;
         }
         return cardRegistry;
