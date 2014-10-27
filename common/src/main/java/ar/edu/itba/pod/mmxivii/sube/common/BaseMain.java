@@ -38,11 +38,21 @@ public abstract class BaseMain
 	{
 		final String host = cmdLine.getOptionValue(HOST_O_L, HOST_O_D);
 		final int port = Integer.valueOf(cmdLine.getOptionValue(PORT_O_L, PORT_O_D));
-		final String maxThreads = cmdLine.getOptionValue(MAX_THREADS_O_L, MAX_THREADS_O_D);
+        final String maxThreads = cmdLine.getOptionValue(MAX_THREADS_O_L, MAX_THREADS_O_D);
 		System.setProperty(MAX_THREADS_JAVA_PROPERTY, maxThreads);
 		System.out.println(port);		//TODO
 		rmiRegistry = Utils.getRegistry(host, port);
 	}
+
+    protected void getRegistryWithParamenters()
+    {
+        final String host = cmdLine.getOptionValue(HOST_O_L, options.getOption(HOST_O_L).getValue());
+        final int port = Integer.valueOf(cmdLine.getOptionValue(PORT_O_L, options.getOption(PORT_O_L).getValue()));
+        final String maxThreads = cmdLine.getOptionValue(MAX_THREADS_O_L, MAX_THREADS_O_D);
+        System.setProperty(MAX_THREADS_JAVA_PROPERTY, maxThreads);
+        System.out.println(port);		//TODO
+        rmiRegistry = Utils.getRegistry(host, port);
+    }
 
 	protected void createRegistry()
 	{

@@ -89,7 +89,7 @@ public class Main extends BaseMain implements Receiver {
     }
 
     private void obtainCardRegistryInstanceFromServer() throws NotBoundException {
-        getRegistry();
+        getRegistryWithParamenters();
         cardRegistry = Utils.lookupObject(CARD_REGISTRY_BIND);
     }
 
@@ -102,7 +102,7 @@ public class Main extends BaseMain implements Receiver {
 
     private void buildCardService() throws EndOfProgramException {
         try{
-            getRegistry();
+            getRegistryWithParamenters();
             cardService = new CardServiceImpl(cardRegistry, channel);
         }catch (Exception e) {
             throw new EndOfProgramException("No se pudo instancia CardService");
@@ -210,7 +210,7 @@ public class Main extends BaseMain implements Receiver {
      */
     public CardRegistry getCardRegistryFromAnyCluster() throws EndOfProgramException {
         try {
-            getRegistry();
+            getRegistryWithParamenters();
             cardRegistry = Utils.lookupObject(CACHE_CARD_REGISTRY_BIND);
         } catch ( Exception e) {
             return null;
