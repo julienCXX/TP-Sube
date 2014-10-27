@@ -26,7 +26,7 @@ public class Main extends BaseMain {
 	private Main(@Nonnull String[] args) throws RemoteException,
 			NotBoundException {
 		super(args, DEFAULT_CLIENT_OPTIONS);
-		getRegistry();
+		getRegistryWithParamenters();
 		System.out.println("s1");
 		setDelay();
 		System.out.println("s2");
