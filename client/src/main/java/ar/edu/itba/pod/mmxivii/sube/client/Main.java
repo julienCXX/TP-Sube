@@ -37,8 +37,8 @@ public class Main extends BaseMain
 	public static void main(@Nonnull String[] args) throws Exception
 	{
 		final Main main = new Main(args);
-		main.run();
-		//main.runAuto();
+		//main.run();
+		main.runAuto();
 	}
 
 	private void run() throws RemoteException
@@ -81,7 +81,7 @@ public class Main extends BaseMain
 	// TODO: let the user choose the execution mode
 	private void runAuto()
 	{
-		RobotParameters p = new RobotParameters(5, 100, 5, 40, 5, true);
+		RobotParameters p = new RobotParameters(5, 100, 5, 40, 1, true);
 		RobotClient rc = new RobotClient(cardClient, p);
 		rc.run();
 	}
