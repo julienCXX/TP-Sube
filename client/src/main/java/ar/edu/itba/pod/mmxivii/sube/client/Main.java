@@ -25,11 +25,24 @@ public class Main extends BaseMain
 
 	private CardClient cardClient = null;
 
-	private String walletFile = "wallet.data";
+	private final String walletFile = "wallet.data";
+	
+	private static final String[][] localOptions = {
+			new String[]{HOST_O_S, HOST_O_L, TRUE},
+			new String[]{PORT_O_S, PORT_O_L, TRUE},
+			new String[]{MAX_THREADS_O_S, MAX_THREADS_O_L, TRUE},
+			new String[]{"a", "automatic", FALSE},
+			new String[]{"md", "min-delay", TRUE},
+			new String[]{"Md", "max-delay", TRUE},
+			new String[]{"ma", "min-amount", TRUE},
+			new String[]{"Ma", "max-amount", TRUE},
+			new String[]{"t", "threads", TRUE},
+			new String[]{"c", "check-every-operation", FALSE}
+	};
 
 	private Main(@Nonnull String[] args) throws NotBoundException
 	{
-		super(args, DEFAULT_CLIENT_OPTIONS);
+		super(args, localOptions);
 		getRegistry();
 		cardClient = Utils.lookupObject(CARD_CLIENT_BIND);
 	}
@@ -37,11 +50,23 @@ public class Main extends BaseMain
 	public static void main(@Nonnull String[] args) throws Exception
 	{
 		final Main main = new Main(args);
-		//main.run();
-		main.runAuto();
+		main.run();
 	}
 
 	private void run() throws RemoteException
+	{
+		IO.printlnInfo("Welcome to the SUBE "
+			+ "(System with Useless and Bothering Elements) client!");
+		IO.println();
+		if (cmdLine.hasOption("automatic"))
+		{
+			runAuto();
+			return;
+		}
+		runManual();
+	}
+
+	private void runManual()
 	{
 		try
 		{
@@ -51,9 +76,6 @@ public class Main extends BaseMain
 			cards.loadFromFile(walletFile);
 			IO.println(" OK");
 
-			IO.printlnInfo("Welcome to the SUBE "
-				+ "(System with Useless and Bothering Elements) client!");
-			IO.println();
 			Menu mainMenu = new Menu("Main menu");
 			mainMenu.addMenuItem("1", "Obtain a new card",
 				new CreateNewCard(cards, cardClient));
@@ -78,12 +100,28 @@ public class Main extends BaseMain
 		}
 	}
 
-	// TODO: let the user choose the execution mode
 	private void runAuto()
 	{
-		RobotParameters p = new RobotParameters(5, 100, 5, 40, 1, true);
+		RobotParameters p = createRobotParametersFromCommandLine();
 		RobotClient rc = new RobotClient(cardClient, p);
 		rc.run();
+	}
+
+	private RobotParameters createRobotParametersFromCommandLine()
+	{
+		int minDelay = new Integer(cmdLine.getOptionValue("min-delay",
+			Integer.toString(RobotParameters.MIN_DELAY))),
+			maxDelay = new Integer(cmdLine.getOptionValue("max-delay",
+					Integer.toString(RobotParameters.MAX_DELAY))),
+			nbThreads = new Integer(cmdLine.getOptionValue("threads",
+					Integer.toString(RobotParameters.NB_THREADS)));
+		double minAmount = new Double(cmdLine.getOptionValue("min-amount",
+			Double.toString(RobotParameters.MIN_OPERATION_AMOUNT))),
+			maxAmount = new Double(cmdLine.getOptionValue("max-amount",
+					Double.toString(RobotParameters.MAX_OPERATION_AMOUNT)));
+		boolean checkEach = cmdLine.hasOption("check-every-operation");
+		return new RobotParameters(minDelay, maxDelay, minAmount, maxAmount,
+			nbThreads, checkEach);
 	}
 
 }

@@ -31,7 +31,7 @@ public class Main extends BaseMain {
 		setDelay();
 		System.out.println("s2");
 		try{
-		createRegistry();
+            createRegistryWithParamenters();
 		}catch(Exception e){
 			
 		}

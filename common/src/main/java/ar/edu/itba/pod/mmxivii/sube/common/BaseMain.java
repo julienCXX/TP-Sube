@@ -67,6 +67,17 @@ public abstract class BaseMain
 		rmiRegistry = Utils.createRegistry(port);
 	}
 
+    protected void createRegistryWithParamenters()
+    {
+        final int port = Integer.valueOf(cmdLine.getOptionValue(PORT_O_L, options.getOption(PORT_O_L).getValue()));
+        if (cmdLine.hasOption(MAX_THREADS_O_L)) {
+            final String maxThreads = cmdLine.getOptionValue(MAX_THREADS_O_L);
+            System.setProperty(MAX_THREADS_JAVA_PROPERTY, maxThreads);
+        }
+
+        rmiRegistry = Utils.createRegistry(port);
+    }
+
 	protected void bindObject(@Nonnull final String name, @Nonnull final RemoteObject remote)
 	{
 		try {

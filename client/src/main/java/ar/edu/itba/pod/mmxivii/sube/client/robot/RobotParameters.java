@@ -11,7 +11,7 @@ public class RobotParameters
 
 	// default values
 	public static final int MIN_DELAY = 0;
-	public static final int MAX_DELAY = 3000;
+	public static final int MAX_DELAY = 1000;
 	public static final double MIN_OPERATION_AMOUNT = 2.0;
 	public static final double MAX_OPERATION_AMOUNT = 20.0;
 	public static final int NB_THREADS = 1;
@@ -133,6 +133,20 @@ public class RobotParameters
 	public boolean getCheckBalanceAfterEachOperation()
 	{
 		return checkBalance;
+	}
+
+	@Override
+	public String toString()
+	{
+		return "Minimal delay duration: " + getMinDelay() + "ms\n"
+			+ "Maximal delay duration: " + getMaxDelay() + "ms\n"
+			+ "Minimal amount of an aperation: " + getMinOperationAmount() + "\n"
+			+ "Maximal amount of an aperation: " + getMaxOperationAmount() + "\n"
+			+ "Number of threads: " + getNumberOfThreads() + "\n"
+			+ "Check balance "
+			+ (getCheckBalanceAfterEachOperation()
+				? "after each recharge or travel operation\n"
+				: "once after each recharge or travel loop");
 	}
 
 }
