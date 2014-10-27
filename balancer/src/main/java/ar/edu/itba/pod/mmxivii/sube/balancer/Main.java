@@ -30,7 +30,11 @@ public class Main extends BaseMain {
 		System.out.println("s1");
 		setDelay();
 		System.out.println("s2");
+		try{
 		createRegistry();
+		}catch(Exception e){
+			
+		}
 		boolean waiting = true;
 		CardRegistry cardRegistry = null;
 		while (waiting) {
