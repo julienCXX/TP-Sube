@@ -6,7 +6,6 @@ import java.util.ArrayList;
 import java.util.List;
 import java.util.concurrent.ExecutorService;
 import java.util.concurrent.Executors;
-import java.util.concurrent.TimeUnit;
 import javax.annotation.Nonnull;
 
 /**
@@ -16,13 +15,14 @@ public class RobotClient
 {
 
 	private final List<Runnable> robots;
-	private final int nbThreads;
+	private final RobotParameters params;
 
 	public RobotClient(@Nonnull CardClient client,
 		@Nonnull RobotParameters params)
 	{
 		robots = new ArrayList<>();
-		nbThreads = params.getNumberOfThreads();
+		this.params = params;
+		int nbThreads = params.getNumberOfThreads();
 		for (int i = 0; i < nbThreads; i++)
 		{
 			robots.add(new RobotClientRunnable(client, params));
@@ -33,7 +33,10 @@ public class RobotClient
 	{
 		String line;
 		IO.printlnInfo("Starting robot client, press “x <Return>” to stop it");
-		ExecutorService executor = Executors.newFixedThreadPool(nbThreads);
+		IO.printlnInfo("Parameters:\n" + params);
+		IO.println();
+		ExecutorService executor = Executors.newFixedThreadPool(
+			params.getNumberOfThreads());
 		for (Runnable r : robots)
 		{
 			executor.execute(r);
