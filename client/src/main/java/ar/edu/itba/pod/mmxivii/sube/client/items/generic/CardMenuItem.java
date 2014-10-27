@@ -5,6 +5,7 @@ import ar.edu.itba.pod.mmxivii.sube.client.exceptions.CardNotFoundException;
 import ar.edu.itba.pod.mmxivii.sube.client.exceptions.CardOperationException;
 import ar.edu.itba.pod.mmxivii.sube.client.exceptions.CommunicationsFailureException;
 import ar.edu.itba.pod.mmxivii.sube.client.exceptions.OperationNotPermittedByBalanceException;
+import ar.edu.itba.pod.mmxivii.sube.client.exceptions.OperationReturnConverter;
 import ar.edu.itba.pod.mmxivii.sube.client.exceptions.ServiceTimeoutException;
 import ar.edu.itba.pod.mmxivii.sube.client.exceptions.UnknownCardOperationException;
 import ar.edu.itba.pod.mmxivii.sube.common.Card;
@@ -30,8 +31,8 @@ public abstract class CardMenuItem extends ClientMenuItem
 	}
 
 	/**
-	 * Prints a meaningful error message, depending on a return value of a card
-	 * operation.
+	 * Check the eturn value of a card operationand throws the relevant
+	 * exception, if needed.
 	 *
 	 * @param ret the return value determining the exception to be thrown
 	 * @param isRecharge true if the operation was a card recharge operation,
@@ -44,22 +45,7 @@ public abstract class CardMenuItem extends ClientMenuItem
 		boolean isRecharge)
 		throws CardOperationException
 	{
-		switch ((int) ret)
-		{
-			case (int) CARD_NOT_FOUND:
-				throw new CardNotFoundException(card);
-			case (int) CANNOT_PROCESS_REQUEST:
-				throw new CannotProcessRequestException(card);
-			case (int) COMMUNICATIONS_FAILURE:
-				throw new CommunicationsFailureException(card);
-			case (int) OPERATION_NOT_PERMITTED_BY_BALANCE:
-				throw new OperationNotPermittedByBalanceException(card,
-					isRecharge);
-			case (int) SERVICE_TIMEOUT:
-				throw new ServiceTimeoutException(card);
-			default:
-				throw new UnknownCardOperationException(card, ret);
-		}
+		OperationReturnConverter.convertReturn(ret, isRecharge, card);
 	}
 
 }
