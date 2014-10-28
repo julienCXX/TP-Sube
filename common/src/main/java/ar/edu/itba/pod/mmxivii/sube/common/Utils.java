@@ -51,11 +51,12 @@ public class Utils
 		final Options result = new Options();
 		result.addOption("help", false, "Help");
 		for (String[] option : options) {
-			if (option.length != 3) throw new IllegalArgumentException("invalid options");
+			if (option.length < 3) throw new IllegalArgumentException("invalid options");
 			final String opt = option[0];
 			final String longOpt = option[1];
 			final boolean hasArg = Boolean.parseBoolean(option[2]);
-			result.addOption(opt, longOpt, hasArg, "");
+			result.addOption(opt, longOpt, hasArg,
+				option.length >= 4 ? option[3] : "");
 		}
 
 		return result;
