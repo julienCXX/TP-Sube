@@ -6,9 +6,11 @@ import org.apache.commons.cli.Options;
 
 import javax.annotation.Nonnull;
 
+import java.lang.reflect.Array;
 import java.rmi.*;
 import java.rmi.registry.Registry;
 import java.rmi.server.RemoteObject;
+import java.util.Arrays;
 
 import static ar.edu.itba.pod.mmxivii.sube.common.Utils.*;
 
@@ -65,9 +67,29 @@ public abstract class BaseMain
 		rmiRegistry = Utils.createRegistry(port);
 	}
 
+    protected void createRegistryWithParamenters()
+    {
+        final int port = Integer.valueOf(cmdLine.getOptionValue(PORT_O_L, options.getOption(PORT_O_L).getValue()));
+        if (cmdLine.hasOption(MAX_THREADS_O_L)) {
+            final String maxThreads = cmdLine.getOptionValue(MAX_THREADS_O_L);
+            System.setProperty(MAX_THREADS_JAVA_PROPERTY, maxThreads);
+        }
+
+        rmiRegistry = Utils.createRegistry(port);
+    }
+
 	protected void bindObject(@Nonnull final String name, @Nonnull final RemoteObject remote)
 	{
 		try {
+			if(Arrays.asList(rmiRegistry.list()).contains(name)){
+				try {
+					rmiRegistry.unbind(name);
+				} catch (NotBoundException e) {
+					// TODO Auto-generated catch block
+					e.printStackTrace();
+				}
+			}
+			
 			rmiRegistry.bind(name, remote);
 		} catch (AlreadyBoundException | RemoteException e) {
 			throw new RuntimeException(e);
