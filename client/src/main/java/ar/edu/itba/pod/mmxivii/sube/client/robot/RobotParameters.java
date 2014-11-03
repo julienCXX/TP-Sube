@@ -63,9 +63,8 @@ public class RobotParameters
 	 * @param maxOpAmount maximum amount of an operation (travel and recharge)
 	 * @param nbThreads number of threads to use (1 thread = 1 connection to
 	 * balancer)
-	 * @param checkBalanceEachOp true to ask and check th balance after each
-	 * operation (of travelling or recharging), false to do it only when
-	 * switching from travelling to recharging (and the opposite)
+	 * @param checkBalanceEachOp true to ask and check the balance after each
+	 * operation (of travelling or recharging), false to disable all checks
 	 */
 	public RobotParameters(int minDelay, int maxDelay,
 		double minOpAmount, double maxOpAmount, int nbThreads,
@@ -143,10 +142,9 @@ public class RobotParameters
 			+ "Minimal amount of an aperation: " + getMinOperationAmount() + "\n"
 			+ "Maximal amount of an aperation: " + getMaxOperationAmount() + "\n"
 			+ "Number of threads: " + getNumberOfThreads() + "\n"
-			+ "Check balance "
 			+ (getCheckBalanceAfterEachOperation()
-				? "after each recharge or travel operation\n"
-				: "once after each recharge or travel loop");
+				? "Check balance after each recharge or travel operation\n"
+				: "Do not check balance");
 	}
 
 }

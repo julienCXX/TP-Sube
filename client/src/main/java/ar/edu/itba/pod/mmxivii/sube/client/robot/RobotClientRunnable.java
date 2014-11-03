@@ -9,8 +9,6 @@ import ar.edu.itba.pod.mmxivii.sube.common.CardRegistry;
 import ar.edu.itba.pod.mmxivii.sube.common.Utils;
 import ar.edu.itba.util.IO;
 import java.rmi.RemoteException;
-import java.util.logging.Level;
-import java.util.logging.Logger;
 import javax.annotation.Nonnull;
 
 /**
@@ -69,7 +67,7 @@ public class RobotClientRunnable implements Runnable
 			try
 			{
 				travelOrRechargeLoop(recharge);
-				checkBalanceConsistency();
+				//checkBalanceConsistency();
 				recharge = !recharge;
 			} catch (InconsistantBalanceException ex)
 			{

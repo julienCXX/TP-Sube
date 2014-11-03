@@ -6,6 +6,7 @@ import ar.edu.itba.pod.mmxivii.sube.client.robot.RobotClient;
 import ar.edu.itba.pod.mmxivii.sube.client.robot.RobotParameters;
 import ar.edu.itba.pod.mmxivii.sube.common.BaseMain;
 import ar.edu.itba.pod.mmxivii.sube.common.CardClient;
+import ar.edu.itba.pod.mmxivii.sube.common.CardRegistry;
 import ar.edu.itba.pod.mmxivii.sube.common.Utils;
 
 import javax.annotation.Nonnull;
@@ -27,17 +28,59 @@ public class Main extends BaseMain
 
 	private final String walletFile = "wallet.data";
 	
-	private static final String[][] localOptions = {
-			new String[]{HOST_O_S, HOST_O_L, TRUE},
-			new String[]{PORT_O_S, PORT_O_L, TRUE},
-			new String[]{MAX_THREADS_O_S, MAX_THREADS_O_L, TRUE},
-			new String[]{"a", "automatic", FALSE},
-			new String[]{"md", "min-delay", TRUE},
-			new String[]{"Md", "max-delay", TRUE},
-			new String[]{"ma", "min-amount", TRUE},
-			new String[]{"Ma", "max-amount", TRUE},
-			new String[]{"t", "threads", TRUE},
-			new String[]{"c", "check-every-operation", FALSE}
+	private static final String[][] localOptions =
+	{
+		new String[]
+		{
+			HOST_O_S, HOST_O_L, TRUE
+		},
+		new String[]
+		{
+			PORT_O_S, PORT_O_L, TRUE
+		},
+		new String[]
+		{
+			MAX_THREADS_O_S, MAX_THREADS_O_L, TRUE
+		},
+		new String[]
+		{
+			"a", "automatic", FALSE
+		},
+		new String[]
+		{
+			"md", "min-delay", TRUE,
+			"Minimal duration of delay (ms) between 2 operations"
+		},
+		new String[]
+		{
+			"Md", "max-delay", TRUE,
+			"Maximal duration of delay (ms) between 2 operations"
+		},
+		new String[]
+		{
+			"ma", "min-amount", TRUE,
+			"Minimal amount of a recharge or travel "
+			+ "operation (at least 1)"
+		},
+		new String[]
+		{
+			"Ma", "max-amount", TRUE,
+			"Maximal amount of a recharge or travel operation "
+			+ "(at most " + CardRegistry.MAX_BALANCE + ")"
+		},
+		new String[]
+		{
+			"t", "threads", TRUE,
+			"The quantity of threads to use (at least 1): "
+			+ "1 thread = 1 card and 1 connection"
+		},
+		new String[]
+		{
+			"c", "check-every-operation", FALSE,
+			"Activates return-code-based balance consistency check, "
+			+ "after each recharge or travel (no balance consistancy check "
+			+ "would be performed otherwise)"
+		}
 	};
 
 	private Main(@Nonnull String[] args) throws NotBoundException
