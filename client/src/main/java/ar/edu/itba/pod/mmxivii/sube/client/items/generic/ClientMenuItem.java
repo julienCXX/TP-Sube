@@ -11,6 +11,11 @@ public abstract class ClientMenuItem implements RunnableMenuItem
 
 	protected CardClient cardClient;
 
+	/**
+	 * Creates the menu item.
+	 *
+	 * @param cardClient the remote client object
+	 */
 	public ClientMenuItem(CardClient cardClient)
 	{
 		this.cardClient = cardClient;

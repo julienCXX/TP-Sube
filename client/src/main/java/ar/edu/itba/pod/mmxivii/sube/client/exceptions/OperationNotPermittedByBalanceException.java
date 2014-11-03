@@ -11,6 +11,13 @@ public class OperationNotPermittedByBalanceException
 	extends CardOperationException
 {
 
+	/**
+	 * Creates the exception.
+	 *
+	 * @param card the card from which the error happened
+	 * @param isRecharge <code>true</code> if this operation was thrown after a
+	 * recharge operation, <code>false</code> otherwise
+	 */
 	public OperationNotPermittedByBalanceException(Card card,
 		boolean isRecharge)
 	{

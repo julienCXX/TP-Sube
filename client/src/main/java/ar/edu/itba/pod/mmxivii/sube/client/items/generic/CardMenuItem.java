@@ -13,6 +13,12 @@ public abstract class CardMenuItem extends ClientMenuItem
 
 	protected Card card;
 
+	/**
+	 * Creates the menu item.
+	 *
+	 * @param cardClient the remote client object
+	 * @param card the card involved in the operations
+	 */
 	public CardMenuItem(CardClient cardClient, Card card)
 	{
 		super(cardClient);
@@ -20,15 +26,14 @@ public abstract class CardMenuItem extends ClientMenuItem
 	}
 
 	/**
-	 * Check the eturn value of a card operationand throws the relevant
+	 * Checks the return value of a card operation and throws the relevant
 	 * exception, if needed.
 	 *
 	 * @param ret the return value determining the exception to be thrown
-	 * @param isRecharge true if the operation was a card recharge operation,
-	 * false otherwise
-	 * @throws
-	 * ar.edu.itba.pod.mmxivii.sube.client.exceptions.CardOperationException the
-	 * exception that will be thrown if an error is detected
+	 * @param isRecharge <code>true</code> if the operation was a card recharge
+	 * operation, <code>false</code> otherwise
+	 * @throws CardOperationException the exception that will be thrown if an
+	 * error is detected
 	 */
 	protected void checkAndThrowCardOperationError(double ret,
 		boolean isRecharge)

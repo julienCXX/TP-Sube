@@ -12,7 +12,7 @@ import java.rmi.RemoteException;
 import javax.annotation.Nonnull;
 
 /**
- *
+ * Represents one thread of the automated client.
  */
 public class RobotClientRunnable implements Runnable
 {
@@ -25,6 +25,12 @@ public class RobotClientRunnable implements Runnable
 	private Card card;
 	private double currentBalance;
 
+	/**
+	 * Creates a thread to be used with an automated client.
+	 *
+	 * @param client the remote client object
+	 * @param params the robot's parameters
+	 */
 	public RobotClientRunnable(@Nonnull CardClient client,
 		@Nonnull RobotParameters params)
 	{
@@ -59,6 +65,11 @@ public class RobotClientRunnable implements Runnable
 		IO.printlnInfo(headerInfoLine("end of execution"));
 	}
 
+	/**
+	 * The thread's main loop, which performs batches of recharges and travels.
+	 *
+	 * @throws InterruptedException if the thread is stopped while waiting
+	 */
 	private void mainLoop() throws InterruptedException
 	{
 		boolean recharge = true; // the card is empty at the beginning
@@ -99,6 +110,18 @@ public class RobotClientRunnable implements Runnable
 		}
 	}
 
+	/**
+	 * Performs a batch of travel or recharge operations, for the current card.
+	 *
+	 * @param recharge <code>true</code> if all the operations are recharge
+	 * operations, <code>false</code> if all the operations are travel
+	 * operations
+	 * @throws RemoteException if the connection with the balancer is broken
+	 * @throws InterruptedException if the thread is stopped while waiting
+	 * @throws InconsistantBalanceException if the locally computed balance
+	 * differs from one operation's return value
+	 * @throws CardOperationException if the service has issues (various types)
+	 */
 	private void travelOrRechargeLoop(boolean recharge) throws RemoteException,
 		InterruptedException,
 		InconsistantBalanceException,
@@ -143,6 +166,13 @@ public class RobotClientRunnable implements Runnable
 		}
 	}
 
+	/**
+	 * Tries to reconnect at a regular interval, after a connection error from
+	 * the balancer or an inconsistent balance error. Will wait again, while the
+	 * balance can't synchronize well.
+	 *
+	 * @throws InterruptedException if the thread is stopped while waiting
+	 */
 	private void reconnectLoop() throws InterruptedException
 	{
 		boolean loop = true;
@@ -175,6 +205,12 @@ public class RobotClientRunnable implements Runnable
 		}
 	}
 
+	/**
+	 * Generates a valid amount (according to the current balance and
+	 * parameters) to be used in a travel operation.
+	 *
+	 * @return the generated amount
+	 */
 	private double genTravelAmount()
 	{
 		double amount = Utils.randomDouble(params.getMinOperationAmount(),
@@ -188,6 +224,12 @@ public class RobotClientRunnable implements Runnable
 		return amount;
 	}
 
+	/**
+	 * Generates a valid amount (according to the current balance and
+	 * parameters) to be used in a recharge operation.
+	 *
+	 * @return the generated amount
+	 */
 	private double genRechargeAmount()
 	{
 		double amount = Utils.randomDouble(params.getMinOperationAmount(),
@@ -201,6 +243,11 @@ public class RobotClientRunnable implements Runnable
 		return amount;
 	}
 
+	/**
+	 * Interrupts this thread for a random duration (according to parameters).
+	 *
+	 * @throws InterruptedException if the thread is stopped while waiting
+	 */
 	private void delay() throws InterruptedException
 	{
 		int delay = Utils.randomInt(params.getMinDelay(),
@@ -208,6 +255,14 @@ public class RobotClientRunnable implements Runnable
 		Thread.sleep(delay);
 	}
 
+	/**
+	 * Checks if the effective balance (asked from server) is consistant with
+	 * the theorical (computed) one. Throws the relevant exception if required.
+	 * Not used because of the direct use of the server (without the service).
+	 *
+	 * @throws RemoteException if the connection with the server is broken
+	 * @throws InconsistantBalanceException if the balance is inconsistant
+	 */
 	private void checkBalanceConsistency() throws RemoteException,
 		InconsistantBalanceException
 	{
@@ -219,6 +274,16 @@ public class RobotClientRunnable implements Runnable
 		}
 	}
 
+	/**
+	 * Checks if the effective balance (from operation return code) is
+	 * consistant with the theorical (computed) one. Throws the relevant
+	 * exception if required.
+	 *
+	 * @param resultingBalance the balance obtained from the last operation (non
+	 * negative return value)
+	 * @throws RemoteException if the connection with the balancer is broken
+	 * @throws InconsistantBalanceException if the balance is inconsistant
+	 */
 	private void checkBalanceConsistency(double resultingBalance)
 		throws RemoteException,
 		InconsistantBalanceException
@@ -230,6 +295,12 @@ public class RobotClientRunnable implements Runnable
 		}
 	}
 
+	/**
+	 * Prefixes a message with the name of this thread.
+	 *
+	 * @param message the message which the name will prepended
+	 * @return the message with the robot's name prepended
+	 */
 	private String headerInfoLine(String message)
 	{
 		return cardOwnerName + ": " + message;

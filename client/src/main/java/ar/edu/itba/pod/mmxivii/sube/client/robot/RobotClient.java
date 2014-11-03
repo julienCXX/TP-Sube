@@ -9,7 +9,8 @@ import java.util.concurrent.Executors;
 import javax.annotation.Nonnull;
 
 /**
- *
+ * Represents an automated client entity. It creates threads, which send batches
+ * of recharge and travel operations, to generate load.
  */
 public class RobotClient
 {
@@ -17,6 +18,12 @@ public class RobotClient
 	private final List<Runnable> robots;
 	private final RobotParameters params;
 
+	/**
+	 * Creates an automated client, waiting for its execution.
+	 *
+	 * @param client the remote client object
+	 * @param params the robot's parameters
+	 */
 	public RobotClient(@Nonnull CardClient client,
 		@Nonnull RobotParameters params)
 	{
@@ -29,6 +36,9 @@ public class RobotClient
 		}
 	}
 
+	/**
+	 * Starts the automated client.
+	 */
 	public void run()
 	{
 		String line;

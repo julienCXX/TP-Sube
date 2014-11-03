@@ -22,6 +22,9 @@ public class CardWallet implements Iterable<Card>
 
 	private List<Card> cards;
 
+	/**
+	 * Creates a new wallet.
+	 */
 	public CardWallet()
 	{
 		cards = new LinkedList<>();

@@ -14,6 +14,12 @@ public class CardMenu extends CardMenuItem
 
 	Menu menu;
 
+	/**
+	 * Creates the menu item.
+	 *
+	 * @param cardClient the remote client object
+	 * @param card the card involved in the operations
+	 */
 	public CardMenu(CardClient cardClient, Card card)
 	{
 		super(cardClient, card);

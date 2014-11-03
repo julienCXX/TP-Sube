@@ -13,6 +13,12 @@ import ar.edu.itba.util.IO;
 public class CreateNewCard extends ClientRootMenuItem
 {
 
+	/**
+	 * Creates the menu item.
+	 *
+	 * @param cards the wallet containing to which the newly card will be added
+	 * @param cardClient the remote client object
+	 */
 	public CreateNewCard(CardWallet cards, CardClient cardClient)
 	{
 		super(cards, cardClient);

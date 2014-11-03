@@ -8,6 +8,12 @@ import ar.edu.itba.pod.mmxivii.sube.common.Card;
 public class UnknownCardOperationException extends CardOperationException
 {
 
+	/**
+	 * Creates the exception.
+	 *
+	 * @param card the card from which the error happened
+	 * @param retCode the code returned by the faulty operation
+	 */
 	public UnknownCardOperationException(Card card, double retCode)
 	{
 		super("Unknown error, code: " + retCode, card);

@@ -14,6 +14,12 @@ import ar.edu.itba.util.Menu;
 public class UseExistingCard extends ClientRootMenuItem
 {
 
+	/**
+	 * Creates the menu item.
+	 *
+	 * @param cards the wallet containing the cards usable in this menu
+	 * @param cardClient the remote client object
+	 */
 	public UseExistingCard(CardWallet cards, CardClient cardClient)
 	{
 		super(cards, cardClient);
