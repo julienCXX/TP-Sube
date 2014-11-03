@@ -34,7 +34,7 @@ public class CardServiceImpl extends UnicastRemoteObject implements CardService
 	@Override
 	public double getCardBalance(@Nonnull UID id) throws RemoteException
 	{
-		return cardRegistry.getCardBalance(id);
+		return localCardRegistry.getCardBalance(id);
 	}
 
 	@Override

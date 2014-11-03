@@ -4,6 +4,7 @@ import ar.edu.itba.pod.mmxivii.sube.common.Card;
 import ar.edu.itba.pod.mmxivii.sube.common.CardRegistry;
 
 import javax.annotation.Nonnull;
+import java.rmi.NotBoundException;
 import java.rmi.RemoteException;
 import java.rmi.server.UID;
 import java.util.concurrent.ConcurrentHashMap;
@@ -23,6 +24,12 @@ public class LocalCardRegistry {
         this.cardRegistry = cardRegistry;
     }
 
+    public double getCardBalance(@Nonnull UID id)
+    {
+        final Double result = balances.get(checkNotNull(id));
+        return result == null ? CARD_NOT_FOUND : result;
+    }
+
     public double addCardOperation(@Nonnull UID id, @Nonnull String description, double amount)
     {
         assertAmount(amount);
@@ -33,7 +40,12 @@ public class LocalCardRegistry {
             try {
                 result = cardRegistry.getCardBalance(id);
             } catch (RemoteException e) {
-                e.printStackTrace();
+                reLookUpCardRegistry();
+                try {
+                    result = cardRegistry.getCardBalance(id);
+                } catch (RemoteException e1) {
+                    e1.printStackTrace();
+                }
             }
         }
         if (result == null) return CARD_NOT_FOUND;
@@ -46,9 +58,24 @@ public class LocalCardRegistry {
 
     public ConcurrentHashMap<UID, Double> synchronizeToSCardRegistry(CardRegistry cardRegistry) throws RemoteException {
         for(UID aUID : balances.keySet()){
-            cardRegistry.addCardOperation(aUID, "charge", balances.get(aUID));
+            try{
+                cardRegistry.addCardOperation(aUID, "charge", balances.get(aUID));
+            }catch (Exception e){
+                reLookUpCardRegistry();
+                cardRegistry.addCardOperation(aUID, "charge", balances.get(aUID));
+            }
+
         }
         return balances;
+    }
+
+    private void reLookUpCardRegistry() {
+        try {
+            cardRegistry = lookupObject(CARD_REGISTRY_BIND);
+            System.out.println("Me volvi a reconectar al cardRegistry");
+        } catch (NotBoundException e1) {
+            System.out.println("No se pudo encontrar al cardRegistry");
+        }
     }
 
     public void clearBalance(){
