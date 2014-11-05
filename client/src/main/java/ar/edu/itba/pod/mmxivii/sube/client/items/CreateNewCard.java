@@ -5,7 +5,7 @@ import ar.edu.itba.pod.mmxivii.sube.client.exceptions.CardNotFoundException;
 import ar.edu.itba.pod.mmxivii.sube.client.items.generic.ClientRootMenuItem;
 import ar.edu.itba.pod.mmxivii.sube.common.Card;
 import ar.edu.itba.pod.mmxivii.sube.common.CardClient;
-import ar.edu.itba.util.IO;
+import ar.edu.itba.pod.mmxivii.sube.common.IO;
 import javax.annotation.Nonnull;
 
 /**

@@ -1,7 +1,7 @@
 package ar.edu.itba.pod.mmxivii.sube.client.robot;
 
 import ar.edu.itba.pod.mmxivii.sube.common.CardClient;
-import ar.edu.itba.util.IO;
+import ar.edu.itba.pod.mmxivii.sube.common.IO;
 import java.util.ArrayList;
 import java.util.List;
 import java.util.concurrent.ExecutorService;

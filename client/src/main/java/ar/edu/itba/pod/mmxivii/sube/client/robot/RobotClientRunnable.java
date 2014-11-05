@@ -7,7 +7,7 @@ import ar.edu.itba.pod.mmxivii.sube.common.Card;
 import ar.edu.itba.pod.mmxivii.sube.common.CardClient;
 import ar.edu.itba.pod.mmxivii.sube.common.CardRegistry;
 import ar.edu.itba.pod.mmxivii.sube.common.Utils;
-import ar.edu.itba.util.IO;
+import ar.edu.itba.pod.mmxivii.sube.common.IO;
 import java.rmi.RemoteException;
 import javax.annotation.Nonnull;
 

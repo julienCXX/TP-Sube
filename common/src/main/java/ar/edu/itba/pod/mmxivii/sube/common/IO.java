@@ -1,4 +1,4 @@
-package ar.edu.itba.util;
+package ar.edu.itba.pod.mmxivii.sube.common;
 
 import java.io.BufferedReader;
 import java.io.IOException;

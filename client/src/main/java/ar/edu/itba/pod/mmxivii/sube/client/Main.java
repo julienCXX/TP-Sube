@@ -15,7 +15,7 @@ import java.rmi.NotBoundException;
 import java.rmi.RemoteException;
 
 import static ar.edu.itba.pod.mmxivii.sube.common.Utils.*;
-import ar.edu.itba.util.IO;
+import ar.edu.itba.pod.mmxivii.sube.common.IO;
 import ar.edu.itba.util.Menu;
 import java.io.IOException;
 import java.util.logging.Level;
