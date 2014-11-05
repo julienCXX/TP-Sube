@@ -15,7 +15,7 @@ public class CardServiceImpl extends UnicastRemoteObject implements CardService
 {
 	private static final long serialVersionUID = 2919260533266908792L;
 
-    private LocalCardRegistry localCardRegistry;
+    private transient LocalCardRegistry localCardRegistry;
 
     @Nonnull
 	private final CardRegistry cardRegistry;
@@ -60,9 +60,10 @@ public class CardServiceImpl extends UnicastRemoteObject implements CardService
      * @throws RemoteException
      */
     private double doCardOperation(UID id, String description, double amount) throws RemoteException {
-        double balance = localCardRegistry.addCardOperation(id, description, amount);
+        OperationDTO dto = localCardRegistry.buildOperation(id, description, amount );
+        double balance = localCardRegistry.addCardOperation(dto);
         if( balance >= 0 ){
-            OperationDTO dto = new OperationDTO(id, description, amount );
+            localCardRegistry.addOpertaion(dto);
             sendMessageToClusters(dto);
         }
         return balance;
@@ -90,13 +91,8 @@ public class CardServiceImpl extends UnicastRemoteObject implements CardService
      * @throws RemoteException
      */
     protected void updateOperation( OperationDTO dto ) throws RemoteException {
-        localCardRegistry.addCardOperation( dto.id, dto.description, dto.amount );
+        localCardRegistry.addCardOperation( dto );
     }
-
-    protected void clearLocalBalance(){
-        localCardRegistry.clearBalance();
-    }
-
 
     @Override
     public ConcurrentHashMap<UID, Double> synchronizeToServer() throws RemoteException {
@@ -104,10 +100,17 @@ public class CardServiceImpl extends UnicastRemoteObject implements CardService
         ConcurrentHashMap<UID, Double> updatedBalance = localCardRegistry.synchronizeToSCardRegistry(cardRegistry);
 
         //mandar mensaje al resto de los caches para que reinicien sus localCardRegistry
-        sendMessageToClusters( OperationDTO.buildClearLocalRegistryMessage() );
+        for(OperationDTO finishedOperations : localCardRegistry.listFinishedOperations()){
+            OperationDTO aFinishedOperation = OperationDTO.buildFinishedOperationMessage(finishedOperations);
+            sendMessageToClusters( aFinishedOperation );
+            localCardRegistry.clearFinishedOperation(aFinishedOperation.operationId);
+        }
 
         return updatedBalance;
     }
 
 
+    public void removeFromPendings(OperationDTO dto) {
+        localCardRegistry.removeFromPendings( dto );
+    }
 }

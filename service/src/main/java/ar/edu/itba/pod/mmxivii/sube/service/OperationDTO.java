@@ -12,27 +12,25 @@ public class OperationDTO implements Serializable{
 
     double amount;
 
-    public OperationDTO(@Nonnull UID id, @Nonnull String description, double amount) {
+    String operationId;
+
+    boolean isReady;
+
+    public OperationDTO(@Nonnull UID id, @Nonnull String description, double amount, String operationId) {
         this.id = id;
         this.description = description;
         this.amount = amount;
+        this.operationId = operationId;
+        this.isReady = false;
     }
 
-    private OperationDTO(String status){
-        this.description = status;
+    public static OperationDTO buildFinishedOperationMessage(OperationDTO operationDTO){
+        operationDTO.isReady = true;
+        return operationDTO;
     }
 
-    public static OperationDTO buildClearLocalRegistryMessage(){
-        return new OperationDTO(CLEAR_LOCAL_CARDREGISTRY);
+    public boolean isOperationFinished(){
+        return isReady;
     }
 
-    public static final String CLEAR_LOCAL_CARDREGISTRY = "CLEAR_LOCAL_CARDREGISTRY";
-
-    public boolean isAMessage() {
-        return description!= null && !description.isEmpty() && id == null;
-    }
-
-    public boolean isClearLocalRegistry() {
-        return description!= null && description.equals(CLEAR_LOCAL_CARDREGISTRY);
-    }
 }

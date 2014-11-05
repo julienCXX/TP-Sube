@@ -97,7 +97,7 @@ public class Main extends BaseMain {
 	private static class SynchronizedThread implements Runnable {
 
 		private CardServiceRegistryImpl serviceRegistry;
-		private static long TIME_TO_WAIT = 90000; // un minuto y medio
+		private static long TIME_TO_WAIT = 20000; // un minuto y medio
 
 		public SynchronizedThread(CardServiceRegistryImpl service) {
 			this.serviceRegistry = service;
@@ -114,7 +114,7 @@ public class Main extends BaseMain {
 				try {
 					serviceRegistry.getCoordinator().synchronizeToServer();
 					System.out.println("Cache sincronizado con exito");
-				} catch (RemoteException e) {
+				} catch (Exception e) {
 					// e.printStackTrace();
 				}
 			}

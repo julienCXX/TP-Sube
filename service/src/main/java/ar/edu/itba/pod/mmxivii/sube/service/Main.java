@@ -1,9 +1,6 @@
 package ar.edu.itba.pod.mmxivii.sube.service;
 
-import ar.edu.itba.pod.mmxivii.sube.common.BaseMain;
-import ar.edu.itba.pod.mmxivii.sube.common.CardRegistry;
-import ar.edu.itba.pod.mmxivii.sube.common.CardServiceRegistry;
-import ar.edu.itba.pod.mmxivii.sube.common.Utils;
+import ar.edu.itba.pod.mmxivii.sube.common.*;
 
 import javax.annotation.Nonnull;
 import java.io.InputStream;
@@ -11,7 +8,10 @@ import java.io.OutputStream;
 import java.rmi.NotBoundException;
 import java.rmi.RemoteException;
 import java.rmi.server.RemoteObject;
+import java.rmi.server.UID;
+import java.rmi.server.UnicastRemoteObject;
 import java.util.Scanner;
+import java.util.concurrent.ConcurrentHashMap;
 
 import org.jgroups.*;
 
@@ -126,6 +126,32 @@ public class Main extends BaseMain implements Receiver {
 		main.run();
 	}
 
+    class MockCardService extends UnicastRemoteObject implements CardService{
+
+        protected MockCardService() throws RemoteException {
+        }
+
+        @Override
+        public double getCardBalance(@Nonnull UID uid) throws RemoteException {
+            return 0;
+        }
+
+        @Override
+        public double travel(@Nonnull UID uid, @Nonnull String s, double v) throws RemoteException {
+            return 0;
+        }
+
+        @Override
+        public double recharge(@Nonnull UID uid, @Nonnull String s, double v) throws RemoteException {
+            return 0;
+        }
+
+        @Override
+        public ConcurrentHashMap<UID, Double> synchronizeToServer() throws RemoteException {
+            return null;
+        }
+    }
+
 	private void run() throws RemoteException
 	{
 		cardServiceRegistry.registerService(cardService);
@@ -166,15 +192,12 @@ public class Main extends BaseMain implements Receiver {
         if (msg.getSrc() != this.channel.getAddress()) {
             OperationDTO dto = (OperationDTO) msg.getObject();
 
-            if(dto.isAMessage()){
-                if(dto.isClearLocalRegistry()){
-                    /**
-                     * Si es el mensaje clear balance entonces reinicio el mapa de balances local.
-                     * Esto pasa cuando el cordinador da la señal a cada uno de sus caches para que reinicien
-                     * el saldo una vez que sea sincronizado el labor de caches de un lapso con el server
-                     */
-                    cardService.clearLocalBalance();
-                }
+            if(dto.isOperationFinished()){
+                /**
+                 *Si la operacion esta completa utilizo el opetationId del DTO y lo saco de las
+                 * operaciones pendientes
+                 */
+                cardService.removeFromPendings(dto);
             }else{
                 /**
                  * Actualizo el balance local de este cache con la operacion que otro cache a llevado a cabo
