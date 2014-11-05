@@ -57,14 +57,17 @@ public class RobotParameters
 	private boolean checkBalance;
 
 	/**
+	 * Builds the robot client's parameters and checks their consistency.
+	 *
 	 * @param minDelay minimum delay between 2 operations (in milliseconds)
 	 * @param maxDelay maximum delay between 2 operations (in milliseconds)
 	 * @param minOpAmount minimum amount of an operation (travel and recharge)
 	 * @param maxOpAmount maximum amount of an operation (travel and recharge)
 	 * @param nbThreads number of threads to use (1 thread = 1 connection to
 	 * balancer)
-	 * @param checkBalanceEachOp true to ask and check the balance after each
-	 * operation (of travelling or recharging), false to disable all checks
+	 * @param checkBalanceEachOp <code>true</code> to ask and check the balance
+	 * after each operation (of travelling or recharging), <code>false</code> to
+	 * disable all checks
 	 */
 	public RobotParameters(int minDelay, int maxDelay,
 		double minOpAmount, double maxOpAmount, int nbThreads,
@@ -104,31 +107,64 @@ public class RobotParameters
 		this.checkBalance = checkBalanceEachOp;
 	}
 
+	/**
+	 * Returns the minimum delay between 2 operations (in milliseconds).
+	 *
+	 * @return the minimum delay between 2 operations (in milliseconds)
+	 */
 	public int getMinDelay()
 	{
 		return minDelay;
 	}
 
+	/**
+	 * Returns the maximum delay between 2 operations (in milliseconds).
+	 *
+	 * @return the maximum delay between 2 operations (in milliseconds)
+	 */
 	public int getMaxDelay()
 	{
 		return maxDelay;
 	}
 
+	/**
+	 * Returns the minimum amount of an operation (travel and recharge).
+	 *
+	 * @return the minimum amount of an operation (travel and recharge)
+	 */
 	public double getMinOperationAmount()
 	{
 		return minOperationAmount;
 	}
 
+	/**
+	 * Returns the maximum amount of an operation (travel and recharge).
+	 *
+	 * @return the maximum amount of an operation (travel and recharge)
+	 */
 	public double getMaxOperationAmount()
 	{
 		return maxOperationAmount;
 	}
 
+	/**
+	 * Returns the number of threads to use (1 thread = 1 connection to
+	 * balancer)
+	 *
+	 * @return the number of threads to use
+	 */
 	public int getNumberOfThreads()
 	{
 		return nbThreads;
 	}
 
+	/**
+	 * Returns the activation state of balance consistency checks.
+	 *
+	 * @return <code>true</code> if the balance will be checked after each
+	 * operation (of travelling or recharging) or <code>false</code> all checks
+	 * are disabled
+	 */
 	public boolean getCheckBalanceAfterEachOperation()
 	{
 		return checkBalance;
@@ -139,8 +175,10 @@ public class RobotParameters
 	{
 		return "Minimal delay duration: " + getMinDelay() + "ms\n"
 			+ "Maximal delay duration: " + getMaxDelay() + "ms\n"
-			+ "Minimal amount of an aperation: " + getMinOperationAmount() + "\n"
-			+ "Maximal amount of an aperation: " + getMaxOperationAmount() + "\n"
+			+ "Minimal amount of an aperation: " + getMinOperationAmount()
+			+ "\n"
+			+ "Maximal amount of an aperation: " + getMaxOperationAmount()
+			+ "\n"
 			+ "Number of threads: " + getNumberOfThreads() + "\n"
 			+ (getCheckBalanceAfterEachOperation()
 				? "Check balance after each recharge or travel operation\n"

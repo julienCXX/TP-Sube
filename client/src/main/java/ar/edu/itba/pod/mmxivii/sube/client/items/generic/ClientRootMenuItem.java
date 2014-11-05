@@ -11,6 +11,12 @@ public abstract class ClientRootMenuItem extends ClientMenuItem
 
 	protected CardWallet cards;
 
+	/**
+	 * Creates the menu item.
+	 *
+	 * @param cards the wallet containing the cards usable in this menu
+	 * @param cardClient the remote client object
+	 */
 	public ClientRootMenuItem(CardWallet cards, CardClient cardClient)
 	{
 		super(cardClient);

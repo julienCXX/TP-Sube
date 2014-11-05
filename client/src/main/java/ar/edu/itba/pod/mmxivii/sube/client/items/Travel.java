@@ -13,12 +13,18 @@ import ar.edu.itba.util.IO;
  */
 public class Travel extends CardMenuItem
 {
-	
+
+	/**
+	 * Creates the menu item.
+	 *
+	 * @param cardClient the remote client object
+	 * @param card the card involved in the operation
+	 */
 	public Travel(CardClient cardClient, Card card)
 	{
 		super(cardClient, card);
 	}
-	
+
 	@Override
 	public void runItem() throws Exception
 	{
@@ -53,5 +59,5 @@ public class Travel extends CardMenuItem
 			IO.printlnError(iae.getMessage()); // recharge too big
 		}
 	}
-	
+
 }

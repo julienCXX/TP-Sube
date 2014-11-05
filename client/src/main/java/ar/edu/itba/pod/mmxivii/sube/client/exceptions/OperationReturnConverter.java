@@ -18,16 +18,15 @@ public class OperationReturnConverter
 	}
 
 	/**
-	 * Check the eturn value of a card operationand throws the relevant
+	 * Check the return value of a card operation and throws the relevant
 	 * exception, if needed.
 	 *
 	 * @param ret the return value determining the exception to be thrown
-	 * @param isRecharge true if the operation was a card recharge operation,
-	 * false otherwise
+	 * @param isRecharge <code>true</code> if the operation was a card recharge
+	 * operation, <code>false</code> otherwise
 	 * @param card the card concerned by the operation
-	 * @throws
-	 * ar.edu.itba.pod.mmxivii.sube.client.exceptions.CardOperationException the
-	 * exception that will be thrown if an error is detected
+	 * @throws CardOperationException the exception that will be thrown if an
+	 * error is detected
 	 */
 	public static void convertReturn(double ret, boolean isRecharge, Card card)
 		throws CardOperationException

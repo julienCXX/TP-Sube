@@ -25,7 +25,8 @@ public class Menu
 	/**
 	 * Creates an empty menu.
 	 *
-	 * @param isRoot true if this menu is the root menu or false otherwise
+	 * @param isRoot <code>true</code> if this menu is the root menu or
+	 * <code>false</code> otherwise
 	 */
 	public Menu(boolean isRoot)
 	{
@@ -51,7 +52,8 @@ public class Menu
 	 * each display).
 	 *
 	 * @param text the text to show at the beginning of the menu.
-	 * @param isRoot true if this menu is the root menu or false otherwise
+	 * @param isRoot <code>true</code> if this menu is the root menu or
+	 * <code>false</code> otherwise
 	 */
 	public Menu(String text, boolean isRoot)
 	{

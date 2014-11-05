@@ -13,6 +13,12 @@ import ar.edu.itba.util.IO;
 public class Recharge extends CardMenuItem
 {
 
+	/**
+	 * Creates the menu item.
+	 *
+	 * @param cardClient the remote client object
+	 * @param card the card involved in the operation
+	 */
 	public Recharge(CardClient cardClient, Card card)
 	{
 		super(cardClient, card);
