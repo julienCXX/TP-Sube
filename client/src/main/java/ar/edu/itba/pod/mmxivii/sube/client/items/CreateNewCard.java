@@ -55,6 +55,11 @@ public class CreateNewCard extends ClientRootMenuItem
 		{
 			// only if the server refuses the card creation
 			IO.printlnError(cnfe.getMessage());
+			IO.print("Do you want to remove this card from the wallet? ");
+			if (IO.readYesNo(IO.DefaultYesNo.YES))
+			{
+				cards.remove(cnfe.getCard());
+			}
 		}
 	}
 
