@@ -4,6 +4,7 @@ import ar.edu.itba.pod.mmxivii.sube.client.exceptions.CardOperationException;
 import ar.edu.itba.pod.mmxivii.sube.client.exceptions.OperationReturnConverter;
 import ar.edu.itba.pod.mmxivii.sube.common.Card;
 import ar.edu.itba.pod.mmxivii.sube.common.CardClient;
+import javax.annotation.Nonnull;
 
 /**
  * A menu item using the CardClient object and a choosen card.
@@ -19,9 +20,13 @@ public abstract class CardMenuItem extends ClientMenuItem
 	 * @param cardClient the remote client object
 	 * @param card the card involved in the operations
 	 */
-	public CardMenuItem(CardClient cardClient, Card card)
+	public CardMenuItem(@Nonnull CardClient cardClient, @Nonnull Card card)
 	{
 		super(cardClient);
+		if (card == null)
+		{
+			throw new NullPointerException("The card cannot be null");
+		}
 		this.card = card;
 	}
 

@@ -13,6 +13,7 @@ import java.util.LinkedList;
 import java.util.List;
 import java.util.logging.Level;
 import java.util.logging.Logger;
+import javax.annotation.Nonnull;
 
 /**
  * The wallet containing a client's cards.
@@ -46,15 +47,19 @@ public class CardWallet implements Iterable<Card>
 	 *
 	 * @param card the card to be added
 	 */
-	public void add(Card card)
+	public void add(@Nonnull Card card)
 	{
+		if (card == null)
+		{
+			throw new NullPointerException("The card cannot be null");
+		}
 		cards.add(card);
 	}
 
 	/**
 	 * Removes a card form the wallet.
 	 *
-	 * @param card th card to be removed
+	 * @param card the card to be removed
 	 */
 	public void remove(Card card)
 	{

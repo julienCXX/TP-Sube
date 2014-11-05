@@ -5,6 +5,7 @@ import ar.edu.itba.pod.mmxivii.sube.common.Card;
 import ar.edu.itba.pod.mmxivii.sube.common.CardClient;
 import static ar.edu.itba.pod.mmxivii.sube.common.CardRegistry.MAX_BALANCE;
 import ar.edu.itba.util.Menu;
+import javax.annotation.Nonnull;
 
 /**
  * The menu allowing operations on a card.
@@ -20,7 +21,7 @@ public class CardMenu extends CardMenuItem
 	 * @param cardClient the remote client object
 	 * @param card the card involved in the operations
 	 */
-	public CardMenu(CardClient cardClient, Card card)
+	public CardMenu(@Nonnull CardClient cardClient, @Nonnull Card card)
 	{
 		super(cardClient, card);
 		menu = new Menu("Management of " + card.getCardHolder()

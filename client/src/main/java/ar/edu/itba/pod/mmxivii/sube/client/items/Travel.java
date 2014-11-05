@@ -6,6 +6,7 @@ import ar.edu.itba.pod.mmxivii.sube.client.items.generic.CardMenuItem;
 import ar.edu.itba.pod.mmxivii.sube.common.Card;
 import ar.edu.itba.pod.mmxivii.sube.common.CardClient;
 import ar.edu.itba.util.IO;
+import javax.annotation.Nonnull;
 
 /**
  * The menu option handling the credit removing from a card, when thu user
@@ -20,7 +21,7 @@ public class Travel extends CardMenuItem
 	 * @param cardClient the remote client object
 	 * @param card the card involved in the operation
 	 */
-	public Travel(CardClient cardClient, Card card)
+	public Travel(@Nonnull CardClient cardClient, @Nonnull Card card)
 	{
 		super(cardClient, card);
 	}

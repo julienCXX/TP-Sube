@@ -6,6 +6,7 @@ import ar.edu.itba.pod.mmxivii.sube.client.items.generic.ClientRootMenuItem;
 import ar.edu.itba.pod.mmxivii.sube.common.Card;
 import ar.edu.itba.pod.mmxivii.sube.common.CardClient;
 import ar.edu.itba.util.IO;
+import javax.annotation.Nonnull;
 
 /**
  * The menu option handling the creation of a new card.
@@ -19,7 +20,8 @@ public class CreateNewCard extends ClientRootMenuItem
 	 * @param cards the wallet containing to which the newly card will be added
 	 * @param cardClient the remote client object
 	 */
-	public CreateNewCard(CardWallet cards, CardClient cardClient)
+	public CreateNewCard(@Nonnull CardWallet cards,
+		@Nonnull CardClient cardClient)
 	{
 		super(cards, cardClient);
 	}

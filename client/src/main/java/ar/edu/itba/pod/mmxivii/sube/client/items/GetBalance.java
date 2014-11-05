@@ -6,6 +6,7 @@ import ar.edu.itba.pod.mmxivii.sube.client.items.generic.CardMenuItem;
 import ar.edu.itba.pod.mmxivii.sube.common.Card;
 import ar.edu.itba.pod.mmxivii.sube.common.CardClient;
 import ar.edu.itba.util.IO;
+import javax.annotation.Nonnull;
 
 /**
  * The menu option handling the fetching of a card's balance.
@@ -19,7 +20,7 @@ public class GetBalance extends CardMenuItem
 	 * @param cardClient the remote client object
 	 * @param card the card involved in the operation
 	 */
-	public GetBalance(CardClient cardClient, Card card)
+	public GetBalance(@Nonnull CardClient cardClient, @Nonnull Card card)
 	{
 		super(cardClient, card);
 	}
