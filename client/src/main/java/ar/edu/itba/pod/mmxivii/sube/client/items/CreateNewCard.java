@@ -44,6 +44,12 @@ public class CreateNewCard extends ClientRootMenuItem
 			IO.printlnError(iae.getMessage());
 			return;
 		}
+		if (card == null)
+		{
+			IO.printlnError("Card creation failed, connection to server may be "
+				+ "broken");
+			return;
+		}
 
 		IO.printlnInfo("Card successfully created");
 		IO.println();
