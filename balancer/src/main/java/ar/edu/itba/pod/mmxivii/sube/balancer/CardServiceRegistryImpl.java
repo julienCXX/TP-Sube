@@ -124,6 +124,7 @@ public class CardServiceRegistryImpl extends UnicastRemoteObject implements
 		if(serviceList.contains(service)){
 			serviceList.remove(service);
 			serviceConnections.remove(service);
+			coordinator=serviceList.get(0);
 		}
 	}
 
