@@ -86,12 +86,16 @@ public class LocalCardRegistry {
         for(String operationId : pendingOperations.keySet()){
             OperationDTO pendingOperation = pendingOperations.get(operationId);
             try{
+System.out.println(String.format("pre-Sinchronization: %s charge",Double.toString(pendingOperation.amount)));
                 cardRegistry.addCardOperation(pendingOperation.id, "charge", pendingOperation.amount);
+System.out.println(String.format("Sinchronization: %s charge",Double.toString(pendingOperation.amount)));
                 finishedOperations.put(pendingOperation.operationId, pendingOperation);
                 pendingOperations.remove(pendingOperation.operationId);
             }catch (Exception e){
+System.out.println(String.format("pro-Re-Sinchronization: %s charge",Double.toString(pendingOperation.amount)));
                 reLookUpCardRegistry();
                 cardRegistry.addCardOperation(pendingOperation.id, "charge", pendingOperation.amount);
+System.out.println(String.format("Re-Sinchronization: %s charge",Double.toString(pendingOperation.amount)));
                 finishedOperations.put(pendingOperation.operationId, pendingOperation);
                 pendingOperations.remove(pendingOperation.operationId);
             }

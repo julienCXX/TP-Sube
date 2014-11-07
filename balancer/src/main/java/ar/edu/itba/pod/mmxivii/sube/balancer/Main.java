@@ -111,6 +111,7 @@ public class Main extends BaseMain {
 				try {
 					Thread.sleep(TIME_TO_WAIT);
 				} catch (InterruptedException e) {
+                    System.out.println("No se pudo sincronizar: "+e.getMessage());
 					// e.printStackTrace();
 				}
 				try {
