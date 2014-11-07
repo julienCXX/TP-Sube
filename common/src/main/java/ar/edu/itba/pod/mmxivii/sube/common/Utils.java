@@ -1,5 +1,8 @@
 package ar.edu.itba.pod.mmxivii.sube.common;
 
+import java.net.InetAddress;
+import java.net.NetworkInterface;
+import java.net.SocketException;
 import org.apache.commons.cli.*;
 
 import javax.annotation.Nonnull;
@@ -109,6 +112,107 @@ public class Utils
 			System.exit(RMI_FAILED_EXIT_CODE);
 			throw new RuntimeException(e);
 		}
+	}
+
+	/**
+	 * Determines wheter an host in local or not.
+	 *
+	 * @param host the host which localness should be tested
+	 * @return <code>true</code> if the provided host is the local host or
+	 * <code>false</code> otherwise
+	 * @see
+	 * http://stackoverflow.com/questions/2406341/how-to-check-if-an-ip-address-is-the-local-host-on-a-multi-homed-system
+	 */
+	public static boolean isLocalHost(String host)
+	{
+		if (host == null)
+		{
+			return true;
+		}
+
+		InetAddress addr;
+		try
+		{
+			addr = InetAddress.getByName(host);
+		} catch (java.net.UnknownHostException e)
+		{
+			return false;
+		}
+		// check if the address is a valid special local or loop back
+		if (addr.isAnyLocalAddress() || addr.isLoopbackAddress())
+		{
+			return true;
+		}
+
+		// check if the address is defined on any interface
+		try
+		{
+			return NetworkInterface.getByInetAddress(addr) != null;
+		} catch (SocketException e)
+		{
+			return false;
+		}
+
+	}
+
+	/**
+	 * Tries to create (only with localhost) a RMI registry. Will try to get it
+	 * only if creation fails.
+	 *
+	 * @param host the host from which get the registry
+	 * @param port the port to use to get or create the registry
+	 * @return the resulting registry
+	 */
+	public static Registry getOrCreateRegistry(String host, int port)
+	{
+		String curHost = host;
+		if (curHost == null)
+		{
+			curHost = "localhost";
+		}
+
+		// if the registry host is the current machine, create the registry
+		if (isLocalHost(curHost))
+		{
+			IO.printlnInfo("Interpreting " + curHost + " as the local host");
+			IO.printlnInfo("Trying to create RMI Registry on port " + port);
+			try
+			{
+				rmiRegistry = LocateRegistry.createRegistry(port);
+				IO.printlnInfo("Created RMI Registry");
+			} catch (RemoteException re)
+			{
+				IO.printlnInfo("Failed to create RMI Registry, "
+					+ "trying to get already existing registry on localhost:"
+					+ port);
+				try
+				{
+					rmiRegistry = LocateRegistry.getRegistry(port);
+					IO.printlnInfo("Got RMI Registry");
+				} catch (RemoteException re2)
+				{
+					IO.printlnError("Failed to get RMI Registry. Reason: "
+						+ re2.getMessage());
+					System.exit(RMI_FAILED_EXIT_CODE);
+				}
+			}
+			return rmiRegistry;
+		}
+
+		// registry host is a remote machine, get the registry for this host
+		IO.printlnInfo("Trying to get RMI registry on " + curHost
+			+ ":" + port);
+		try
+		{
+			rmiRegistry = LocateRegistry.getRegistry(curHost, port);
+			IO.printlnInfo("Got RMI Registry");
+		} catch (RemoteException re)
+		{
+			IO.printlnError("Failed to get RMI Registry. Reason: "
+				+ re.getMessage());
+			System.exit(RMI_FAILED_EXIT_CODE);
+		}
+		return rmiRegistry;
 	}
 
 	public static void bindObject(@Nonnull Registry registry, @Nonnull final String name, @Nonnull final Remote remote) throws AlreadyBoundException

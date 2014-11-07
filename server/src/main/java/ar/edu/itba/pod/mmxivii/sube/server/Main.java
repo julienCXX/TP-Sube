@@ -17,7 +17,9 @@ public class Main extends BaseMain {
 
 	private Main(@Nonnull String[] args) throws RemoteException {
 		super(args, OPTIONS_CONFIG);
-		getRegistryWithParamenters();
+		//getRegistryWithParamenters();
+		//getRegistry();
+		getOrCreateRegistry();
 		setDelay();
 
 		storeFile = cmdLine.getOptionValue(STORE_FILE_O_L, STORE_FILE_O_D);

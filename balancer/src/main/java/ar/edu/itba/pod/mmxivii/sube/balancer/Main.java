@@ -26,15 +26,17 @@ public class Main extends BaseMain {
 	private Main(@Nonnull String[] args) throws RemoteException,
 			NotBoundException {
 		super(args, DEFAULT_CLIENT_OPTIONS);
-		getRegistryWithParamenters();
+		//getRegistryWithParamenters();
+		//getRegistry();
+		getOrCreateRegistry();
 		System.out.println("s1");
 		setDelay();
 		System.out.println("s2");
-		try{
+		/*try{
             createRegistryWithParamenters();
 		}catch(Exception e){
 			
-		}
+		}*/
 		boolean waiting = true;
 		CardRegistry cardRegistry = null;
 		while (waiting) {
