@@ -125,4 +125,9 @@ public abstract class BaseMain
 		Utils.skipDelay(skipDelay);
 	}
 
+	protected void unSetDelay()
+	{
+		Utils.skipDelay(true);
+	}
+
 }

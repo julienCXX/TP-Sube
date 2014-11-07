@@ -51,11 +51,13 @@ public class Main extends BaseMain {
 	}
 
 	private void printBalances() {
+		unSetDelay();
 		for (Card card : cardRegistry.getCards()) {
 			System.out.println(String.format("C:%s:%s:%.2f",
 					card.getCardHolder(), card.getLabel(),
 					cardRegistry.getCardBalance(card.getId())));
 		}
+		setDelay();
 	}
 
 	private CardRegistryImpl getOrCreateCardRegistry() throws RemoteException {
