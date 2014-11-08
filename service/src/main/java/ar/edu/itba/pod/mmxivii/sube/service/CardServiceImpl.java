@@ -91,7 +91,7 @@ public class CardServiceImpl extends UnicastRemoteObject implements CardService
      * @throws RemoteException
      */
     protected void updateOperation( OperationDTO dto ) throws RemoteException {
-        localCardRegistry.addCardOperation( dto );
+        localCardRegistry.addOpertaion(dto);
     }
 
     @Override

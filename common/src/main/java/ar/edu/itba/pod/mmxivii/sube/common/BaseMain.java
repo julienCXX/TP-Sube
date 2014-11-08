@@ -102,7 +102,7 @@ public abstract class BaseMain
 					e.printStackTrace();
 				}
 			}
-			
+
 			rmiRegistry.bind(name, remote);
 		} catch (AlreadyBoundException | RemoteException e) {
 			throw new RuntimeException(e);
