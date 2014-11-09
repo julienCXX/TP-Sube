@@ -129,7 +129,16 @@ public class CardServiceRegistryImpl extends UnicastRemoteObject implements
 	}
 
 	public CardService getCoordinator(){
-		return this.coordinator;
+        for(CardService aCardService : serviceList){
+            try{
+                if(aCardService.isAlive()){
+                    return aCardService;
+                }
+            }catch (Exception e){
+                //no hago nada
+            }
+        }
+		return null;
 	}
 	
 }

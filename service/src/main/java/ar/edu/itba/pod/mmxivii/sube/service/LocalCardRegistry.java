@@ -86,18 +86,26 @@ public class LocalCardRegistry {
         for(String operationId : pendingOperations.keySet()){
             OperationDTO pendingOperation = pendingOperations.get(operationId);
             try{
-System.out.println(String.format("pre-Sinchronization: %s charge",Double.toString(pendingOperation.amount)));
                 cardRegistry.addCardOperation(pendingOperation.id, "charge", pendingOperation.amount);
 System.out.println(String.format("Sinchronization: %s charge",Double.toString(pendingOperation.amount)));
                 finishedOperations.put(pendingOperation.operationId, pendingOperation);
                 pendingOperations.remove(pendingOperation.operationId);
             }catch (Exception e){
-System.out.println(String.format("pro-Re-Sinchronization: %s charge",Double.toString(pendingOperation.amount)));
-                reLookUpCardRegistry();
-                cardRegistry.addCardOperation(pendingOperation.id, "charge", pendingOperation.amount);
-System.out.println(String.format("Re-Sinchronization: %s charge",Double.toString(pendingOperation.amount)));
-                finishedOperations.put(pendingOperation.operationId, pendingOperation);
-                pendingOperations.remove(pendingOperation.operationId);
+
+                try {
+                    ((CardRegistry)Utils.rmiRegistry.lookup(CARD_REGISTRY_BIND))
+                            .addCardOperation(pendingOperation.id, "charge", pendingOperation.amount);
+            System.out.println(String.format("Re-Sinchronization: %s charge",Double.toString(pendingOperation.amount)));
+                    finishedOperations.put(pendingOperation.operationId, pendingOperation);
+                    pendingOperations.remove(pendingOperation.operationId);
+                } catch (NotBoundException e1) {
+                    System.out.println("Server is down");
+                    break;
+                }
+                //cardRegistry = (CardRegistry)rmiRegistry.lookup("cardRegistry");
+
+                //cardRegistry.addCardOperation(pendingOperation.id, "charge", pendingOperation.amount);
+
             }
         }
 
@@ -106,7 +114,7 @@ System.out.println(String.format("Re-Sinchronization: %s charge",Double.toString
 
     private void reLookUpCardRegistry() {
         try {
-            cardRegistry = Utils.lookupObject(CARD_REGISTRY_BIND);
+            cardRegistry = (CardRegistry)Utils.lookupObject(CARD_REGISTRY_BIND);
             System.out.println("Me volvi a reconectar al cardRegistry");
         } catch (NotBoundException e1) {
             System.out.println("No se pudo encontrar al cardRegistry");

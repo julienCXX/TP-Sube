@@ -2,6 +2,7 @@ package ar.edu.itba.pod.mmxivii.sube.balancer;
 
 import ar.edu.itba.pod.mmxivii.sube.common.BaseMain;
 import ar.edu.itba.pod.mmxivii.sube.common.CardRegistry;
+import ar.edu.itba.pod.mmxivii.sube.common.CardService;
 import ar.edu.itba.pod.mmxivii.sube.common.Utils;
 
 import javax.annotation.Nonnull;
@@ -72,13 +73,15 @@ public class Main extends BaseMain {
 			if (line.equals(Main.SYNCHRONIZE)) {
 
 				try {
+                    CardService coordinator = main.cardServiceRegistry.getCoordinator();
+                    if(coordinator != null){
+                        ConcurrentHashMap<UID, Double> map = coordinator.synchronizeToServer();
+                        System.out.println("Usuarios");
+                        for (Entry<UID, Double> e : map.entrySet()) {
+                            System.out.println(e.getKey()+" Monto: "+e.getValue() );
+                        }
+                    }
 
-					ConcurrentHashMap<UID, Double> map = main.cardServiceRegistry
-							.getCoordinator().synchronizeToServer();
-					System.out.println("Usuarios");
-					for (Entry<UID, Double> e : map.entrySet()) {
-						System.out.println(e.getKey()+" Monto: "+e.getValue() );
-					}
 				} catch (RemoteException e) {
 					System.out.println("Error - Reintente");
 				}
@@ -115,8 +118,12 @@ public class Main extends BaseMain {
 					// e.printStackTrace();
 				}
 				try {
-					serviceRegistry.getCoordinator().synchronizeToServer();
-					System.out.println("Cache sincronizado con exito");
+                    CardService coordinator = serviceRegistry.getCoordinator();
+                    if(coordinator != null){
+                        coordinator.synchronizeToServer();
+                        System.out.println("Cache sincronizado con exito");
+                    }
+
 				} catch (Exception e) {
 					// e.printStackTrace();
 				}

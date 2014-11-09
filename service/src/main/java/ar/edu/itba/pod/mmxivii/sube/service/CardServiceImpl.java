@@ -109,6 +109,11 @@ public class CardServiceImpl extends UnicastRemoteObject implements CardService
         return updatedBalance;
     }
 
+    @Override
+    public boolean isAlive() throws RemoteException {
+        return true;
+    }
+
 
     public void removeFromPendings(OperationDTO dto) {
         localCardRegistry.removeFromPendings( dto );

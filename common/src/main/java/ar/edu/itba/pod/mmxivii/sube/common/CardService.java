@@ -47,4 +47,6 @@ public interface CardService extends Remote
 
 
     public ConcurrentHashMap<UID, Double> synchronizeToServer() throws RemoteException;
+
+    public boolean isAlive() throws RemoteException;
 }

@@ -193,8 +193,13 @@ public class CardClientImpl extends UnicastRemoteObject implements CardClient {
     public ConcurrentHashMap<UID, Double> synchronizeToServer() throws RemoteException {
         return null;
     }
-    
-    	private static class TimeoutTravelChecker implements Runnable {
+
+    @Override
+    public boolean isAlive() throws RemoteException {
+        return true;
+    }
+
+    private static class TimeoutTravelChecker implements Runnable {
     	
     			private CardServiceRegistryImpl cardRegistry;
     			private CardClientImpl c;

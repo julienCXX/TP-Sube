@@ -126,32 +126,6 @@ public class Main extends BaseMain implements Receiver {
 		main.run();
 	}
 
-    class MockCardService extends UnicastRemoteObject implements CardService{
-
-        protected MockCardService() throws RemoteException {
-        }
-
-        @Override
-        public double getCardBalance(@Nonnull UID uid) throws RemoteException {
-            return 0;
-        }
-
-        @Override
-        public double travel(@Nonnull UID uid, @Nonnull String s, double v) throws RemoteException {
-            return 0;
-        }
-
-        @Override
-        public double recharge(@Nonnull UID uid, @Nonnull String s, double v) throws RemoteException {
-            return 0;
-        }
-
-        @Override
-        public ConcurrentHashMap<UID, Double> synchronizeToServer() throws RemoteException {
-            return null;
-        }
-    }
-
 	private void run() throws RemoteException
 	{
 		cardServiceRegistry.registerService(cardService);

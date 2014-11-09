@@ -32,4 +32,9 @@ public class DummyCardServiceImpl implements CardService
         return null;
     }
 
+    @Override
+    public boolean isAlive() throws RemoteException {
+        return true;
+    }
+
 }
