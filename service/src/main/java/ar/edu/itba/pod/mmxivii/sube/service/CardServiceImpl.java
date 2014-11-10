@@ -2,14 +2,20 @@ package ar.edu.itba.pod.mmxivii.sube.service;
 
 import ar.edu.itba.pod.mmxivii.sube.common.CardRegistry;
 import ar.edu.itba.pod.mmxivii.sube.common.CardService;
+import ar.edu.itba.pod.mmxivii.sube.common.Utils;
 import org.jgroups.Channel;
 import org.jgroups.Message;
 
 import javax.annotation.Nonnull;
+import java.rmi.AccessException;
+import java.rmi.NotBoundException;
 import java.rmi.RemoteException;
 import java.rmi.server.UID;
 import java.rmi.server.UnicastRemoteObject;
 import java.util.concurrent.ConcurrentHashMap;
+
+import static ar.edu.itba.pod.mmxivii.sube.common.CardRegistry.CARD_NOT_FOUND;
+import static ar.edu.itba.pod.mmxivii.sube.common.Utils.CARD_REGISTRY_BIND;
 
 public class CardServiceImpl extends UnicastRemoteObject implements CardService
 {
@@ -34,8 +40,35 @@ public class CardServiceImpl extends UnicastRemoteObject implements CardService
 	@Override
 	public double getCardBalance(@Nonnull UID id) throws RemoteException
 	{
-		return localCardRegistry.getCardBalance(id);
+        double balance = localCardRegistry.getCardBalance(id);
+        if(balance == CARD_NOT_FOUND){
+            balance = getCardBalanceFromServer( id );
+            if(balance >= 0.0){
+                localCardRegistry.modifyBalance(id, balance);
+            }
+        }
+		return balance;
 	}
+
+    private double getCardBalanceFromServer(@Nonnull UID id){
+        double balance = 0.0;
+        try{
+            balance = cardRegistry.getCardBalance(id);
+        }catch (Exception e){
+            try {
+                balance =
+                        ((CardRegistry) Utils.rmiRegistry.lookup(CARD_REGISTRY_BIND))
+                                .getCardBalance(id);
+            } catch (NotBoundException e1) {
+                e1.printStackTrace();
+            } catch (AccessException e1) {
+                e1.printStackTrace();
+            } catch (RemoteException e1) {
+                e1.printStackTrace();
+            }
+        }
+        return balance;
+    }
 
 	@Override
 	public double travel(@Nonnull UID id, @Nonnull String description, double amount) throws RemoteException

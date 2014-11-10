@@ -35,6 +35,10 @@ public class LocalCardRegistry {
         startId();
     }
 
+    public void modifyBalance(@Nonnull UID id, double balance){
+        balances.put(id,balance);
+    }
+
     private void startId() {
         baseId = UUID.randomUUID().toString();
         incrementId = 0;
