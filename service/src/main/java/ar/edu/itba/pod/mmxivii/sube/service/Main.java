@@ -73,6 +73,7 @@ public class Main extends BaseMain implements Receiver {
                 obtainCardRegistryInstanceFromServer();
                 bindCardRegistryInstanceForCaches();
             } catch (Exception e) {
+				e.printStackTrace();
                 throw new EndOfProgramException(
                         String.format("No se pudieron obtener %s desde el server", CARD_REGISTRY_BIND)
                 );
@@ -89,7 +90,8 @@ public class Main extends BaseMain implements Receiver {
     }
 
     private void obtainCardRegistryInstanceFromServer() throws NotBoundException {
-        getRegistryWithParamenters();
+        //getRegistryWithParamenters();
+		getRegistry();
         cardRegistry = Utils.lookupObject(CARD_REGISTRY_BIND);
     }
 
@@ -102,9 +104,11 @@ public class Main extends BaseMain implements Receiver {
 
     private void buildCardService() throws EndOfProgramException {
         try{
-            getRegistryWithParamenters();
+            //getRegistryWithParamenters();
+			getRegistry();
             cardService = new CardServiceImpl(cardRegistry, channel);
         }catch (Exception e) {
+			e.printStackTrace();
             throw new EndOfProgramException("No se pudo instancia CardService");
         }
     }
@@ -115,6 +119,7 @@ public class Main extends BaseMain implements Receiver {
             channel.setReceiver(this);
             channel.connect(CLUSTER_NAME);
         }catch (Exception e){
+			e.printStackTrace();
             throw new EndOfProgramException("No me pude conectar al cluster");
         }
 
@@ -207,7 +212,8 @@ public class Main extends BaseMain implements Receiver {
      */
     public CardRegistry getCardRegistryFromAnyCluster() throws EndOfProgramException {
         try {
-            getRegistryWithParamenters();
+            //getRegistryWithParamenters();
+			getRegistry();
             cardRegistry = Utils.lookupObject(CACHE_CARD_REGISTRY_BIND);
         } catch ( Exception e) {
             return null;

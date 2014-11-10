@@ -45,7 +45,7 @@ public abstract class BaseMain
 		System.out.println(port);		//TODO
 		rmiRegistry = Utils.getRegistry(host, port);
 	}
-
+/*
     protected void getRegistryWithParamenters()
     {
         final String host = cmdLine.getOptionValue(HOST_O_L, options.getOption(HOST_O_L).getValue());
@@ -55,7 +55,7 @@ public abstract class BaseMain
         System.out.println(port);		//TODO
         rmiRegistry = Utils.getRegistry(host, port);
     }
-
+*/
 	protected void createRegistry()
 	{
 		final int port = Integer.valueOf(cmdLine.getOptionValue(PORT_O_L, PORT_O_D));
